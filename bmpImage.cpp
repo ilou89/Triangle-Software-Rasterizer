@@ -45,7 +45,6 @@ bool
 Bitmap::setPixel(uint32_t x, uint32_t y, const Color& color)
 {
     uint8_t *raw_data = data.get();
-
     memcpy(raw_data + (x + y * width) * RGB, color.raw, RGB);
 
     return true;
