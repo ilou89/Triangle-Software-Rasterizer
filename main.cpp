@@ -1,5 +1,5 @@
-#include "bmpImage.h"
-#include "bresenham.h"
+#include "bitmap.h"
+#include "simpleBresenham.h"
 #include <iostream>
 #include <chrono>
 
