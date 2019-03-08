@@ -5,30 +5,19 @@ const Color GREEN = Color(0, 255, 0, 255);
 const Color BLUE  = Color(0, 0, 255, 255);
 const Color WHITE = Color(255, 255, 255, 255);
 
-Bresenham::Bresenham(Bitmap& bmp)
+DrawLine::DrawLine(Bitmap& bmp)
  : bmp(bmp)
 {
 
 }
 
-//Bresenham::Bresenham(const Bresenham& rhs)
-//{
-//
-//}
-//
-//Bresenham&
-//Bresenham::operator=(const Bresenham& rhs)
-//{
-//
-//}
-
-Bresenham::~Bresenham()
+DrawLine::~DrawLine()
 {
 
 }
 
 void
-Bresenham::drawLines()
+DrawLine::drawLines()
 {
     //y increasing octants 0-3
     line(13, 20, 500, 400, WHITE);
@@ -57,6 +46,17 @@ Bresenham::drawLines()
     line(50, 590, 790, 100, GREEN);
     bmp.setPixel(50, 590, RED);
     bmp.setPixel(790, 100, RED);
+}
+
+Bresenham::Bresenham(Bitmap& bmp)
+ : DrawLine(bmp)
+{
+
+}
+
+Bresenham::~Bresenham()
+{
+
 }
 
 void

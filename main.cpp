@@ -18,7 +18,7 @@ int main() {
     auto end = chrono::system_clock::now();
     auto elapsed =
     chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    cout << elapsed.count() << endl;
+    cout << "Elapsed milliseconds:" << elapsed.count() << endl;
 
     bitmap.write("lines.bmp");
 
