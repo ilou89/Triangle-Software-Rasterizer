@@ -8,7 +8,7 @@ protected:
     Bitmap& bmp;
 
 private:
-    virtual void line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color) = 0;
+    virtual void line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color);
     virtual void octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) = 0;
     virtual void octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) = 0;
 

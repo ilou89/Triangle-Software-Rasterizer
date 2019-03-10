@@ -17,6 +17,32 @@ DrawLine::~DrawLine()
 }
 
 void
+DrawLine::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color)
+{
+    int xDirection = 1;
+    int dx, dy;
+
+    if(y0 > y1) {
+        swap(y0, y1);
+        swap(x0, x1);
+    }
+
+    dx = x1 - x0;
+    dy = y1 - y0;
+
+    if(dx < 0) {
+        dx = -dx;
+        xDirection = -xDirection;
+    }
+
+    if(dx > dy) {
+        octant03(x0, y0, dx, dy, xDirection, color);
+    } else {
+        octant12(x0, y0, dx, dy, xDirection, color);
+    }
+}
+
+void
 DrawLine::drawLines()
 {
     //y increasing octants 0-3

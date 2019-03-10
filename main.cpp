@@ -9,11 +9,11 @@ const unsigned int HEIGHT = 600;
 int main() {
 
     Bitmap bitmap(WIDTH, HEIGHT);
-    Bresenham bresenham(bitmap);
+    SimpleBresenham simpleBresenham(bitmap);
 
     auto start = std::chrono::system_clock::now();
     for(uint32_t i = 0; i < 10000; i++) {
-        bresenham.drawLines();
+        simpleBresenham.drawLines();
     }
     auto end = chrono::system_clock::now();
     auto elapsed =
