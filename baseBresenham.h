@@ -1,5 +1,5 @@
-#ifndef __DRAWLINES_H__
-#define __DRAWLINES_H__
+#ifndef __BASEBRESENHAM_H__
+#define __BASEBRESENHAM_H__
 
 #include "bitmap.h"
 
@@ -8,7 +8,7 @@ protected:
     Bitmap& bmp;
 
 private:
-    virtual void line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color);
+    void line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color);
     virtual void octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) = 0;
     virtual void octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) = 0;
 
@@ -20,4 +20,4 @@ public:
     void drawLines();
 };
 
-#endif //__DRAWLINES_H__
+#endif //__BASEBRESENHAM_H__

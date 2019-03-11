@@ -1,5 +1,5 @@
-#ifndef __BRESENHAM_H__
-#define __BRESENHAM_H__
+#ifndef __SIMPLEBRESENHAM_H__
+#define __SIMPLEBRESENHAM_H__
 
 #include "baseBresenham.h"
 
@@ -15,5 +15,5 @@ public:
     ~SimpleBresenham();
 };
 
-#endif //__BRESENHAM_H__
+#endif //__SIMPLEBRESENHAM_H__
 
