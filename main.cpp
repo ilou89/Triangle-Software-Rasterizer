@@ -1,6 +1,7 @@
 #include "bitmap.h"
 #include "simpleBresenham.h"
 #include "integerBresenham.h"
+#include "sliceBresenham.h"
 #include <iostream>
 #include <chrono>
 

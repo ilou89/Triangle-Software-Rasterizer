@@ -35,7 +35,7 @@ DrawLine::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y
         xDirection = -xDirection;
     }
 
-    vertical line
+    //vertical line
     if(dx == 0) {
         vertical(x0, y0, dy, color);
         return;
