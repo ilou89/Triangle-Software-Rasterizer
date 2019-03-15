@@ -35,6 +35,24 @@ DrawLine::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y
         xDirection = -xDirection;
     }
 
+    vertical line
+    if(dx == 0) {
+        vertical(x0, y0, dy, color);
+        return;
+    }
+
+    //horizontal line
+    if(dy == 0){
+        horizontal(x0, y0, dx, xDirection, color);
+        return;
+    }
+
+    //diagonal line
+    if(dx == dy){
+        diagonal(x0, y0, dx, xDirection, color);
+        return;
+    }
+
     if(dx > dy) {
         octant03(x0, y0, dx, dy, xDirection, color);
     } else {
@@ -72,5 +90,60 @@ DrawLine::drawLines()
     line(50, 590, 790, 100, GREEN);
     bmp.setPixel(50, 590, RED);
     bmp.setPixel(790, 100, RED);
+
+    //vertical
+    line(600, 100, 600, 500, RED);
+    bmp.setPixel(600, 100, WHITE);
+    bmp.setPixel(600, 500, WHITE);
+    line(200, 500, 200, 100, RED);
+    bmp.setPixel(200, 500, WHITE);
+    bmp.setPixel(200, 100, WHITE);
+
+    //horizontal
+    line(200, 500, 600, 500, RED);
+    bmp.setPixel(200, 500, WHITE);
+    bmp.setPixel(600, 500, WHITE);
+    line(600, 100, 200, 100, RED);
+    bmp.setPixel(600, 100, WHITE);
+    bmp.setPixel(200, 100, WHITE);
+
+    //diagonal
+    line(200, 100, 600, 500, RED);
+    bmp.setPixel(200, 100, WHITE);
+    bmp.setPixel(600, 500, WHITE);
+    line(600, 100, 200, 500, RED);
+    bmp.setPixel(600, 100, WHITE);
+    bmp.setPixel(200, 500, WHITE);
+}
+
+void
+DrawLine::vertical(unsigned int x0, unsigned int y0, int dy, const Color& color)
+{
+    bmp.setPixel(x0, y0, color);
+    while(dy--) {
+        y0++;
+        bmp.setPixel(x0, y0, color);
+    }
+}
+
+void
+DrawLine::horizontal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color)
+{
+    bmp.setPixel(x0, y0, color);
+    while(dx--) {
+        x0 += xDirection;
+        bmp.setPixel(x0, y0, color);
+    }
+}
+
+void
+DrawLine::diagonal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color)
+{
+    bmp.setPixel(x0, y0, color);
+    while(dx--) {
+        x0 += xDirection;
+        y0++;
+        bmp.setPixel(x0, y0, color);
+    }
 }
 

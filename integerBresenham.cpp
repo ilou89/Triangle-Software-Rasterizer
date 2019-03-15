@@ -16,16 +16,15 @@ IntegerBresenham::octant03(unsigned int x, unsigned int y, int dx, int dy, int x
 {
     int dy2 = 2 * dy;
     int dx2 = 2 * dx;
-    int dy2dx2 = dy2 - dx2;
-    int error = dy2 - dx;
+    int error = -dx;
+    int slope = dy2;
 
     bmp.setPixel(x, y, color);
     while(dx--) {
+        error += slope;
         if(error >= 0) {
             y++;
-            error += dy2dx2;
-        } else {
-            error += dy2;
+            error -= dx2;
         }
 
         x += xDirection;
@@ -38,16 +37,15 @@ IntegerBresenham::octant12(unsigned int x, unsigned int y, int dx, int dy, int x
 {
     int dy2 = 2 * dy;
     int dx2 = 2 * dx;
-    int dx2dy2 = dx2 - dy2;
-    int error = dx2 - dy;
+    int error = - dy;
+    int slope = dx2;
 
     bmp.setPixel(x, y, color);
     while(dy--) {
+        error += slope;
         if(error >= 0) {
             x += xDirection;
-            error += dx2dy2;
-        } else {
-            error += dx2;
+            error -= dy2;
         }
 
         y++;
