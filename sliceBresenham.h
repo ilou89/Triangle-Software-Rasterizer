@@ -1,19 +1,21 @@
-#ifndef __SIMPLEBRESENHAM_H__
-#define __SIMPLEBRESENHAM_H__
+#ifndef __SLICEBRESENHAM_H__
+#define __SLICEBRESENHAM_H__
 
 #include "baseBresenham.h"
 
-class sliceBresenham: public DrawLine {
+class SliceBresenham: public DrawLine {
 private:
     void octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color);
     void octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color);
+    void horizontalSlice(unsigned int& x, unsigned int y, int xDirection, int startSlice, const Color& color);
+    void verticalSlice(unsigned int x, unsigned int& y, int runSlice, const Color& color);
 
 public:
-    sliceBresenham(Bitmap& bmp);
-    //sliceBresenham(const sliceBresenham& rhs);
-    //sliceBresenham& operator=(const sliceBresenham& rhs);
-    ~sliceBresenham();
+    SliceBresenham(Bitmap& bmp);
+    //SliceBresenham(const SliceBresenham& rhs);
+    //SliceBresenham& operator=(const SliceBresenham& rhs);
+    ~SliceBresenham();
 };
 
-#endif //__SIMPLEBRESENHAM_H__
+#endif //__SLICEBRESENHAM_H__
 
