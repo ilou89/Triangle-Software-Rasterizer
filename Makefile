@@ -1,5 +1,5 @@
 CC = g++
-CPPFLAGS = -Wall -std=c++14 -O0
+CPPFLAGS = -Wall -std=c++14
 LDFLAGS =
 LIBS =
 TARGET = drawlines

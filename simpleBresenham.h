@@ -10,8 +10,6 @@ private:
 
 public:
     SimpleBresenham(Bitmap& bmp);
-    //SimpleBresenham(const SimpleBresenham& rhs);
-    //SimpleBresenham& operator=(const SimpleBresenham& rhs);
     ~SimpleBresenham();
 };
 

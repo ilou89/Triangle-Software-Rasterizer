@@ -12,8 +12,6 @@ private:
 
 public:
     SliceBresenham(Bitmap& bmp);
-    //SliceBresenham(const SliceBresenham& rhs);
-    //SliceBresenham& operator=(const SliceBresenham& rhs);
     ~SliceBresenham();
 };
 

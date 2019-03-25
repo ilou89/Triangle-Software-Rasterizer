@@ -6,7 +6,7 @@ Bitmap::Bitmap(uint32_t width, uint32_t height)
    data(nullptr)
 {
    unsigned long bytes = RGB * width * height;
-   data = make_unique<uint8_t[]>(bytes);
+   data = std::make_unique<uint8_t[]>(bytes);
 }
 
 Bitmap::Bitmap(const Bitmap& rhs)
@@ -15,7 +15,7 @@ Bitmap::Bitmap(const Bitmap& rhs)
    data(nullptr)
 {
    unsigned long bytes = RGB * width * height;
-   data = make_unique<uint8_t[]>(bytes);
+   data = std::make_unique<uint8_t[]>(bytes);
    memcpy(data.get(), rhs.data.get(), bytes);
 }
 
@@ -29,7 +29,7 @@ Bitmap::operator=(const Bitmap& rhs)
         width = rhs.width;
         height = rhs.height;
         unsigned long bytes = RGB * width * height;
-        data = make_unique<uint8_t[]>(bytes);
+        data = std::make_unique<uint8_t[]>(bytes);
         memcpy(data.get(), rhs.data.get(), bytes);
     }
 
@@ -58,8 +58,8 @@ Bitmap::write(const char* filename)
 
     fillHeaders(fileHeader, infoHeader);
 
-    ofstream file;
-    file.open(filename, ios::out|ios::binary);
+    std::ofstream file;
+    file.open(filename, std::ios::out|std::ios::binary);
 
     if(!file) {
         return false;

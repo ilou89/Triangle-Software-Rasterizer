@@ -2,6 +2,7 @@
 #include "simpleBresenham.h"
 #include "integerBresenham.h"
 #include "sliceBresenham.h"
+#include "modelLoader.h"
 #include <iostream>
 #include <chrono>
 
@@ -19,10 +20,10 @@ int main() {
     for(uint32_t i = 0; i < 1000000; i++) {
         simpleBresenham.drawLines();
     }
-    auto end = chrono::system_clock::now();
+    auto end = std::chrono::system_clock::now();
     auto elapsed =
-    chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    cout << "Elapsed milliseconds:" << elapsed.count() << endl;
+    std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "Elapsed milliseconds:" << elapsed.count() << std::endl;
 
     bitmap.write("lines.bmp");
 

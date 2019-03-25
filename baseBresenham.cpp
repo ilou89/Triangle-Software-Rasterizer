@@ -23,8 +23,8 @@ DrawLine::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y
     int dx, dy;
 
     if(y0 > y1) {
-        swap(y0, y1);
-        swap(x0, x1);
+        std::swap(y0, y1);
+        std::swap(x0, x1);
     }
 
     dx = x1 - x0;

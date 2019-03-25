@@ -17,8 +17,6 @@ private:
 
 public:
     DrawLine(Bitmap& bmp);
-    //DrawLine(const DrawLine& rhs);
-    //DrawLine& operator=(const DrawLine& rhs);
     virtual ~DrawLine();
     void drawLines();
 };

@@ -10,8 +10,6 @@ private:
 
 public:
     IntegerBresenham(Bitmap& bmp);
-    //IntegerBresenham(const IntegerBresenham& rhs);
-    //IntegerBresenham& operator=(const IntegerBresenham& rhs);
     ~IntegerBresenham();
 };
 

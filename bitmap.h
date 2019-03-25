@@ -6,8 +6,6 @@
 #include <cstring>
 #include <fstream>
 
-using namespace std;
-
 #pragma pack(push, 2)
 struct FileHeader {
     uint8_t  fileType[2]{'B', 'M'};
@@ -45,27 +43,19 @@ struct Color {
     };
 
     Color()
-     : value(0) {
-
-    }
+     : value(0) { }
 
     Color(uint32_t value)
-     : value(value) {
-
-    }
+     : value(value) { }
 
     Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
      : blue(blue),
        green(green),
        red(red),
-       alpha(alpha) {
-
-    }
+       alpha(alpha) { }
 
     Color(const Color& color)
-     : value(color.value) {
-
-    }
+     : value(color.value) { }
 
     Color& operator=(const Color& color) {
         if(this != &color) {
@@ -79,7 +69,7 @@ class Bitmap {
 private:
     uint32_t width;
     uint32_t height;
-    unique_ptr<uint8_t[]> data;
+    std::unique_ptr<uint8_t[]> data;
 
     void fillHeaders(FileHeader& fileHeader, InfoHeader& infoHeader);
 
