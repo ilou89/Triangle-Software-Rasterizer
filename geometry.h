@@ -12,16 +12,24 @@ public:
     Vec2(T x, T y)
      : x(x), y(y) { }
 
-    Vec2& operator+=(const Vec2& rhs) {
-        this->x += rhs.x;
-        this->y += rhs.y;
-        return *this;
+    Vec2<T> operator+(const Vec2<T> &rhs) const {
+        return Vec2<t>(this->x + rhs.x, this->y + rhs.y);
+    }
+
+    Vec2<T> operator-(const Vec2<T> &rhs) const {
+        return Vec2<T>(this->x - rhs.x, this->y - rhs.y);
+    }
+
+    Vec2<T> operator*(T value) const {
+        return Vec2<T>(this->x * value, this->y * value);
     }
 
 private:
     T x, y;
 };
 
+typedef Vec2<float> Vec2f;
+typedef Vec2<int> Vec2i;
 
 template<typename T>
 class Vec3 {
@@ -32,23 +40,25 @@ public:
     Vec3(T x, T y, T z)
      : x(x), y(y), x(z) { }
 
-    Vec3& operator+=(const Vec3& rhs) {
-        this->x += rhs.x;
-        this->y += rhs.y;
-        this->z += rhs.z;
-        return *this;
+    Vec3<T> operator+(const Vec3<T> &rhs) const {
+        return Vec3<t>(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z);
+    }
+
+    Vec3<T> operator-(const Vec3<T> &rhs) const {
+        return Vec3<T>(this->x - rhs.x, this->y - rhs.y, this->z - rhs.z);
+    }
+
+    Vec3<T> operator*(T value) const {
+        return Vec3<T>(this->x * value, this->y * value, this->z * value);
     }
 
 private:
     T x, y, z;
 };
 
-template<typename T>
-inline T operator+(T lhs, const T& rhs) {
-    lhs += rhs;
-    return lhs;
-}
+typedef Vec3<float> Vec3f;
+typedef Vec3<int> Vec3i;
 
-}
+} //namespace
 
 #endif //__GEOMETRY_H__
