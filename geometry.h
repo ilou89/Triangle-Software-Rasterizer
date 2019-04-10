@@ -1,8 +1,6 @@
 #ifndef __GEOMETRY_H__
 #define __GEOMETRY_H__
 
-namespace modload {
-
 template<typename T>
 class Vec2 {
 public:
@@ -13,7 +11,7 @@ public:
      : x(x), y(y) { }
 
     Vec2<T> operator+(const Vec2<T> &rhs) const {
-        return Vec2<t>(this->x + rhs.x, this->y + rhs.y);
+        return Vec2<T>(this->x + rhs.x, this->y + rhs.y);
     }
 
     Vec2<T> operator-(const Vec2<T> &rhs) const {
@@ -35,13 +33,13 @@ template<typename T>
 class Vec3 {
 public:
     Vec3()
-     : x(0), y(0), x(0) { }
+     : x(0), y(0), z(0) { }
 
     Vec3(T x, T y, T z)
-     : x(x), y(y), x(z) { }
+     : x(x), y(y), z(z) { }
 
     Vec3<T> operator+(const Vec3<T> &rhs) const {
-        return Vec3<t>(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z);
+        return Vec3<T>(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z);
     }
 
     Vec3<T> operator-(const Vec3<T> &rhs) const {
@@ -58,7 +56,5 @@ private:
 
 typedef Vec3<float> Vec3f;
 typedef Vec3<int> Vec3i;
-
-} //namespace
 
 #endif //__GEOMETRY_H__

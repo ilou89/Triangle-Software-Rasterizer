@@ -1,13 +1,20 @@
-#ifndef __OBJLOADER_H__
-#define __OBJLOADER_H__
+#ifndef __MODLOADER_H__
+#define __MODLOADER_H__
 
 #include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include "geometry.h"
 
-class ObjLoader {
+class ModelLoader {
+private:
+    void loadVertices(std::string& line);
+
 public:
-    ObjLoader();
-    ~ObjLoader();
+    ModelLoader();
+    ~ModelLoader();
     bool loadFile(std::string filename);
 };
 
-#endif //__OBJLOADER_H__
+#endif //__MODLOADER_H__

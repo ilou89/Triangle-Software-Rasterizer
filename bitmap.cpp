@@ -60,8 +60,7 @@ Bitmap::write(const char* filename)
 
     std::ofstream file;
     file.open(filename, std::ios::out|std::ios::binary);
-
-    if(!file) {
+    if(!file.is_open()) {
         return false;
     }
 
@@ -70,10 +69,6 @@ Bitmap::write(const char* filename)
     file.write(reinterpret_cast<char *>(data.get()), width * height * RGB);
 
     file.close();
-
-    if(!file) {
-        return false;
-    }
 
     return true;
 }

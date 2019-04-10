@@ -20,12 +20,20 @@ int main() {
     for(uint32_t i = 0; i < 1000000; i++) {
         simpleBresenham.drawLines();
     }
+
+    //load data
+    ModelLoader mdloader;
+    if(!mdloader.loadFile("obj/african_head.obj")) {
+        std::cerr << "unable to execute loadFile" << std::endl;
+    }
+
     auto end = std::chrono::system_clock::now();
     auto elapsed =
     std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     std::cout << "Elapsed milliseconds:" << elapsed.count() << std::endl;
 
     bitmap.write("lines.bmp");
+
 
     return 0;
 }
