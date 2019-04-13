@@ -22,7 +22,6 @@ public:
         return Vec2<T>(this->x * value, this->y * value);
     }
 
-private:
     T x, y;
 };
 
@@ -50,8 +49,7 @@ public:
         return Vec3<T>(this->x * value, this->y * value, this->z * value);
     }
 
-private:
-    T x, y, z;
+	T x, y, z;
 };
 
 typedef Vec3<float> Vec3f;
