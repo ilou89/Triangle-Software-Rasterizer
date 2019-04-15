@@ -10,9 +10,10 @@
 
 class ModelLoader {
 private:
-	void fillVectors(std::ifstream& myfile);
-    std::vector<Vec3f> vec3_v;
-    std::vector<std::vector<int>> vertexIndices;
+    std::vector<Vec3f> vertices;
+    std::vector<std::vector<int>> indices;
+
+    void fillVectors(std::ifstream& myfile);
 
 public:
     ModelLoader();

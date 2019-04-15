@@ -49,7 +49,7 @@ public:
         return Vec3<T>(this->x * value, this->y * value, this->z * value);
     }
 
-	T x, y, z;
+    T x, y, z;
 };
 
 typedef Vec3<float> Vec3f;

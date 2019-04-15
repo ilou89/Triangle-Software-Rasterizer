@@ -1,5 +1,4 @@
 #include "modelLoader.h"
-#include <cstdint>
 
 ModelLoader::ModelLoader()
 {
@@ -24,7 +23,7 @@ ModelLoader::loadFile(std::string filename)
         return false;
     }
 
-   fillVectors(myfile);
+    fillVectors(myfile);
 
     myfile.close();
 
@@ -36,36 +35,43 @@ ModelLoader::fillVectors(std::ifstream& myfile)
 {
     std::string line;
 
-    while (getline(myfile, line)) {
+    while (std::getline(myfile, line)) {
         std::istringstream stream(line);
 
         if (!line.compare(0, 2, "v ")) {
-            Vec3f v;
-            char trash;
-            stream >> trash;
-            stream >> v.x;
-            stream >> v.y;
-            stream >> v.z;
-            vec3_v.push_back(v);
+            char space;
+            Vec3f tempVertex;
+
+            stream >> space;
+            stream >> tempVertex.x;
+            stream >> tempVertex.y;
+            stream >> tempVertex.z;
+            vertices.push_back(tempVertex);
 
         } else if (!line.compare(0, 2, "f ")) {
-			std::vector<int> indices;
-            char trash;
-            stream >> trash;
-			int index;
+            std::vector<int> tempIndex;
+            int index;
+            char space;
+            int dummy;
+
+            stream >> space;
 
             for (int i = 0; i < 3; ++i) {
                 stream >> index;
-				indices.push_back(index);
-                stream >> trash;
-                stream >> index;
-                stream >> trash;
-                stream >> index;
+                stream >> space;
+
+                stream >> dummy;
+                stream >> space;
+
+                stream >> dummy;
+                tempIndex.push_back(index);
             }
+
+            indices.push_back(tempIndex);
 
         } else {
             std::cout << line << std::endl;
         }
     }
-
 }
+

@@ -12,9 +12,7 @@ const unsigned int HEIGHT = 600;
 int main() {
 
     Bitmap bitmap(WIDTH, HEIGHT);
-    //SimpleBresenham simpleBresenham(bitmap);
     IntegerBresenham simpleBresenham(bitmap);
-    //SliceBresenham simpleBresenham(bitmap);
 
     auto start = std::chrono::system_clock::now();
     for(uint32_t i = 0; i < 1000000; i++) {
@@ -23,7 +21,7 @@ int main() {
 
     //load data
     ModelLoader mdloader;
-    if(!mdloader.loadFile("obj/african_head.obj")) {
+    if(!mdloader.loadFile("obj/cube.obj")) {
         std::cerr << "unable to execute loadFile" << std::endl;
     }
 
