@@ -5,7 +5,6 @@
 #include "modelLoader.h"
 #include <iostream>
 #include <chrono>
-#include <getopt.h>
 
 static const unsigned int WIDTH = 800;
 static const unsigned int HEIGHT = 600;
@@ -15,6 +14,7 @@ static bool parseArguments(int argc, char *argv[], std::string *filename, int *c
 
 int main(int argc, char *argv[]) {
 
+    DrawLine *drawer;
     std::string filename;
     int choice;
 
@@ -23,11 +23,18 @@ int main(int argc, char *argv[]) {
     }
 
     Bitmap bitmap(WIDTH, HEIGHT);
-    IntegerBresenham simpleBresenham(bitmap);
+
+    if (choice == 1) {
+        drawer = new SimpleBresenham(bitmap);
+    } else if (choice ==2 ) {
+        drawer = new IntegerBresenham(bitmap);
+    } else {
+        drawer = new SliceBresenham(bitmap);
+    }
 
     auto start = std::chrono::system_clock::now();
-    for(uint32_t i = 0; i < 1000000; i++) {
-        simpleBresenham.drawLines();
+    for(uint32_t i = 0; i < 1000; i++) {
+        drawer->drawLines();
     }
 
     //load data
@@ -59,6 +66,7 @@ static void printUsage(std::string name) {
 }
 
 static bool parseArguments(int argc, char *argv[], std::string *filename, int *choice) {
+
     if (argc == 1) {
         printUsage(argv[0]);
         std::cerr << "Running with default configuration\n"
@@ -87,7 +95,6 @@ static bool parseArguments(int argc, char *argv[], std::string *filename, int *c
             if (i + 1 < argc) {
                 std::istringstream stream(argv[++i]);
                 stream >> *choice;
-                std::cout << *choice << std::endl;
             } else {
                 std::cerr << "--bresenham oprion requires one argument" << std::endl;
                 return false;
