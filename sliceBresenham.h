@@ -3,10 +3,10 @@
 
 #include "baseBresenham.h"
 
-class SliceBresenham: public DrawLine {
+class SliceBresenham: public BaseBresenham {
 private:
-    void octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color);
-    void octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color);
+    void octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) override;
+    void octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) override;
     void horizontalSlice(unsigned int& x, unsigned int y, int xDirection, int startSlice, const Color& color);
     void verticalSlice(unsigned int x, unsigned int& y, int runSlice, const Color& color);
 

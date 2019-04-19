@@ -1,7 +1,7 @@
 #include "integerBresenham.h"
 
 IntegerBresenham::IntegerBresenham(Bitmap& bmp)
- : DrawLine(bmp)
+ : BaseBresenham(bmp)
 {
 
 }

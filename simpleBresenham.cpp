@@ -1,7 +1,7 @@
 #include "simpleBresenham.h"
 
 SimpleBresenham::SimpleBresenham(Bitmap& bmp)
- : DrawLine(bmp)
+ : BaseBresenham(bmp)
 {
 
 }

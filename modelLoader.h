@@ -1,11 +1,12 @@
 #ifndef __MODLOADER_H__
 #define __MODLOADER_H__
 
+#include "geometry.h"
+
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include "geometry.h"
 #include <vector>
 
 class ModelLoader {

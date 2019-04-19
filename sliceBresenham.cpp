@@ -1,7 +1,7 @@
 #include "sliceBresenham.h"
 
 SliceBresenham::SliceBresenham(Bitmap& bmp)
- : DrawLine(bmp)
+ : BaseBresenham(bmp)
 {
 
 }

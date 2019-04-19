@@ -3,7 +3,7 @@
 
 #include "bitmap.h"
 
-class DrawLine {
+class BaseBresenham {
 protected:
     Bitmap& bmp;
 
@@ -16,8 +16,8 @@ private:
     void diagonal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color);
 
 public:
-    DrawLine(Bitmap& bmp);
-    virtual ~DrawLine();
+    BaseBresenham(Bitmap& bmp);
+    virtual ~BaseBresenham();
     void drawLines();
 };
 

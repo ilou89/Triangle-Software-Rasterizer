@@ -5,19 +5,19 @@ const Color GREEN = Color(0, 255, 0, 255);
 const Color BLUE  = Color(0, 0, 255, 255);
 const Color WHITE = Color(255, 255, 255, 255);
 
-DrawLine::DrawLine(Bitmap& bmp)
+BaseBresenham::BaseBresenham(Bitmap& bmp)
  : bmp(bmp)
 {
 
 }
 
-DrawLine::~DrawLine()
+BaseBresenham::~BaseBresenham()
 {
 
 }
 
 void
-DrawLine::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color)
+BaseBresenham::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color)
 {
     int xDirection = 1;
     int dx, dy;
@@ -61,7 +61,7 @@ DrawLine::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y
 }
 
 void
-DrawLine::drawLines()
+BaseBresenham::drawLines()
 {
     //y increasing octants 0-3
     line(13, 20, 500, 400, WHITE);
@@ -117,7 +117,7 @@ DrawLine::drawLines()
 }
 
 void
-DrawLine::vertical(unsigned int x0, unsigned int y0, int dy, const Color& color)
+BaseBresenham::vertical(unsigned int x0, unsigned int y0, int dy, const Color& color)
 {
     bmp.setPixel(x0, y0, color);
     while(dy--) {
@@ -127,7 +127,7 @@ DrawLine::vertical(unsigned int x0, unsigned int y0, int dy, const Color& color)
 }
 
 void
-DrawLine::horizontal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color)
+BaseBresenham::horizontal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color)
 {
     bmp.setPixel(x0, y0, color);
     while(dx--) {
@@ -137,7 +137,7 @@ DrawLine::horizontal(unsigned int x0, unsigned int y0, int dx, int xDirection, c
 }
 
 void
-DrawLine::diagonal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color)
+BaseBresenham::diagonal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color)
 {
     bmp.setPixel(x0, y0, color);
     while(dx--) {

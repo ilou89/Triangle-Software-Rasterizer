@@ -1,10 +1,9 @@
 #include "bitmap.h"
-#include "simpleBresenham.h"
-#include "integerBresenham.h"
-#include "sliceBresenham.h"
+#include "lineDrawerFactory.h"
 #include "modelLoader.h"
-#include <iostream>
+
 #include <chrono>
+#include <iostream>
 
 static const unsigned int WIDTH = 800;
 static const unsigned int HEIGHT = 600;
@@ -13,8 +12,7 @@ static void printUsage(std::string name);
 static bool parseArguments(int argc, char *argv[], std::string *filename, int *choice);
 
 int main(int argc, char *argv[]) {
-
-    DrawLine *drawer;
+    std::unique_ptr<BaseBresenham> lineDrawer;
     std::string filename;
     int choice;
 
@@ -24,22 +22,16 @@ int main(int argc, char *argv[]) {
 
     Bitmap bitmap(WIDTH, HEIGHT);
 
-    if (choice == 1) {
-        drawer = new SimpleBresenham(bitmap);
-    } else if (choice ==2 ) {
-        drawer = new IntegerBresenham(bitmap);
-    } else {
-        drawer = new SliceBresenham(bitmap);
-    }
+    lineDrawer = LineDrawerFactory::makeLineDrawer(choice, bitmap);
 
     auto start = std::chrono::system_clock::now();
-    for(uint32_t i = 0; i < 1000; i++) {
-        drawer->drawLines();
+    for (uint32_t i = 0; i < 1000; i++) {
+        lineDrawer->drawLines();
     }
 
     //load data
     ModelLoader mdloader;
-    if(!mdloader.loadFile(filename)) {
+    if (!mdloader.loadFile(filename)) {
         std::cerr << "unable to execute loadFile" << std::endl;
     }
 
@@ -88,7 +80,7 @@ static bool parseArguments(int argc, char *argv[], std::string *filename, int *c
             if (i + 1 < argc) {
                 *filename = argv[++i];
             } else {
-                std::cerr << "--filename oprion requires one argument" << std::endl;
+                std::cerr << "--filename option requires one argument" << std::endl;
                 return false;
             }
         } else if ((arg == "-b") || (arg == "-bresenham")) {
@@ -96,7 +88,7 @@ static bool parseArguments(int argc, char *argv[], std::string *filename, int *c
                 std::istringstream stream(argv[++i]);
                 stream >> *choice;
             } else {
-                std::cerr << "--bresenham oprion requires one argument" << std::endl;
+                std::cerr << "--bresenham option requires one argument" << std::endl;
                 return false;
             }
         }
