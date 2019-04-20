@@ -1,5 +1,5 @@
-#ifndef __MODLOADER_H__
-#define __MODLOADER_H__
+#ifndef __MODELLOADER_H__
+#define __MODELLOADER_H__
 
 #include "geometry.h"
 
@@ -20,6 +20,12 @@ public:
     ModelLoader();
     ~ModelLoader();
     bool loadFile(std::string filename);
+
+    int verticesSize();
+    int indicesSize();
+    std::vector<int> getIndicesAt(int index);
+    Vec3f getVerticesAt(int index);
 };
 
-#endif //__MODLOADER_H__
+#endif //__MODELLOADER_H__
+

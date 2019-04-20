@@ -11,7 +11,7 @@ private:
     void verticalSlice(unsigned int x, unsigned int& y, int runSlice, const Color& color);
 
 public:
-    SliceBresenham(Bitmap& bmp);
+    SliceBresenham(Bitmap& bmp, ModelLoader& model);
     ~SliceBresenham();
 };
 

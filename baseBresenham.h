@@ -2,10 +2,12 @@
 #define __BASEBRESENHAM_H__
 
 #include "bitmap.h"
+#include "modelLoader.h"
 
 class BaseBresenham {
 protected:
     Bitmap& bmp;
+    ModelLoader& model;
 
 private:
     void line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color);
@@ -16,9 +18,10 @@ private:
     void diagonal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color);
 
 public:
-    BaseBresenham(Bitmap& bmp);
+    BaseBresenham(Bitmap& bmp, ModelLoader& model);
     virtual ~BaseBresenham();
     void drawLines();
+    void wireframe();
 };
 
 #endif //__BASEBRESENHAM_H__

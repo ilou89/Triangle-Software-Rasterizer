@@ -1,7 +1,7 @@
 #include "sliceBresenham.h"
 
-SliceBresenham::SliceBresenham(Bitmap& bmp)
- : BaseBresenham(bmp)
+SliceBresenham::SliceBresenham(Bitmap& bmp, ModelLoader& model)
+ : BaseBresenham(bmp, model)
 {
 
 }

@@ -5,8 +5,8 @@ const Color GREEN = Color(0, 255, 0, 255);
 const Color BLUE  = Color(0, 0, 255, 255);
 const Color WHITE = Color(255, 255, 255, 255);
 
-BaseBresenham::BaseBresenham(Bitmap& bmp)
- : bmp(bmp)
+BaseBresenham::BaseBresenham(Bitmap& bmp, ModelLoader& model)
+ : bmp(bmp), model(model)
 {
 
 }
@@ -144,6 +144,47 @@ BaseBresenham::diagonal(unsigned int x0, unsigned int y0, int dx, int xDirection
         x0 += xDirection;
         y0++;
         bmp.setPixel(x0, y0, color);
+    }
+}
+
+void
+BaseBresenham::wireframe()
+{
+    unsigned int width = bmp.getWidth();
+    unsigned int height = bmp.getHeight();
+
+    for (int i = 0; i < model.indicesSize(); ++i) {
+        std::vector<int> face = model.getIndicesAt(i);
+        for (int j = 0; j < 3; ++j) {
+
+            /**
+             * Assume that the vertices read from .obj file
+             * are already projected and are in screen space,
+             * otherwise perspective division would be needed
+             */
+            Vec3f v0 = model.getVerticesAt(face[j]);
+            Vec3f v1 = model.getVerticesAt(face[(j + 1) % 3]);
+
+            /**
+             * Normalize coordinates (from [-1,1] -> [0,1])
+             * Normalized Device Coordinates
+             */
+            float x0_proj_remap = (v0.x + 1.0f) / 2;
+            float y0_proj_remap = (v0.y + 1.0f) / 2;
+            float x1_proj_remap = (v1.x + 1.0f) / 2;
+            float y1_proj_remap = (v1.y + 1.0f) / 2;
+
+            /**
+             * Express normalized coordinates in terms of pixels
+             * Raster Space
+             */
+            int x0_proj_pix  = static_cast<int>(x0_proj_remap * width);
+            int y0_proj_pix  = static_cast<int>(y0_proj_remap * height);
+            int x1_proj_pix  = static_cast<int>(x1_proj_remap * width);
+            int y1_proj_pix  = static_cast<int>(y1_proj_remap * height);
+
+            line(x0_proj_pix, y0_proj_pix, x1_proj_pix, y1_proj_pix, WHITE);
+        }
     }
 }
 

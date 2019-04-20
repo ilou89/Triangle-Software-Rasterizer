@@ -67,8 +67,8 @@ struct Color {
 
 class Bitmap {
 private:
-    uint32_t width;
-    uint32_t height;
+    unsigned int width;
+    unsigned int height;
     std::unique_ptr<uint8_t[]> data;
 
     void fillHeaders(FileHeader& fileHeader, InfoHeader& infoHeader);
@@ -78,12 +78,15 @@ public:
         RGB = 3, RGBA = 4
     };
 
-    Bitmap(uint32_t width, uint32_t height);
+    Bitmap(unsigned int width, unsigned int height);
     Bitmap(const Bitmap& rhs);
     Bitmap& operator=(const Bitmap& rhs);
     ~Bitmap();
-    bool setPixel(uint32_t x, uint32_t y, const Color& color);
+
+    bool setPixel(unsigned int x, unsigned int y, const Color& color);
     bool write(const char* filename);
+    unsigned int getWidth() const;
+    unsigned int getHeight() const;
 };
 
 #endif //__BMPIMAGE_H__

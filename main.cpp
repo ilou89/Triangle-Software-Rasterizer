@@ -9,31 +9,34 @@ static const unsigned int WIDTH = 800;
 static const unsigned int HEIGHT = 600;
 
 static void printUsage(std::string name);
-static bool parseArguments(int argc, char *argv[], std::string *filename, int *choice);
+static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice);
 
 int main(int argc, char *argv[]) {
     std::unique_ptr<BaseBresenham> lineDrawer;
     std::string filename;
     int choice;
 
-    if (!parseArguments(argc, argv, &filename, &choice)) {
+    if (!parseArguments(argc, argv, filename, choice)) {
+        return 1;
+    }
+
+    ModelLoader mdloader;
+    if (!mdloader.loadFile(filename)) {
+        std::cerr << "unable to execute loadFile" << std::endl;
         return 1;
     }
 
     Bitmap bitmap(WIDTH, HEIGHT);
 
-    lineDrawer = LineDrawerFactory::makeLineDrawer(choice, bitmap);
+    lineDrawer = LineDrawerFactory::makeLineDrawer(choice, bitmap, mdloader);
 
     auto start = std::chrono::system_clock::now();
+
     for (uint32_t i = 0; i < 1000; i++) {
         lineDrawer->drawLines();
     }
 
-    //load data
-    ModelLoader mdloader;
-    if (!mdloader.loadFile(filename)) {
-        std::cerr << "unable to execute loadFile" << std::endl;
-    }
+    lineDrawer->wireframe();
 
     auto end = std::chrono::system_clock::now();
     auto elapsed =
@@ -57,17 +60,15 @@ static void printUsage(std::string name) {
               << std::endl;
 }
 
-static bool parseArguments(int argc, char *argv[], std::string *filename, int *choice) {
+static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice) {
+    filename = "obj/cube.obj";
+    choice = 1;
 
     if (argc == 1) {
         printUsage(argv[0]);
         std::cerr << "Running with default configuration\n"
                   << "cube.obj file and simpleBresenham algorithm\n"
                   << std::endl;
-
-        *filename = "obj/cube.obj";
-        *choice = 1;
-
         return true;
     }
 
@@ -78,7 +79,7 @@ static bool parseArguments(int argc, char *argv[], std::string *filename, int *c
             return false;
         } else if ((arg == "-f") || (arg == "-filename")) {
             if (i + 1 < argc) {
-                *filename = argv[++i];
+                filename = argv[++i];
             } else {
                 std::cerr << "--filename option requires one argument" << std::endl;
                 return false;
@@ -86,7 +87,7 @@ static bool parseArguments(int argc, char *argv[], std::string *filename, int *c
         } else if ((arg == "-b") || (arg == "-bresenham")) {
             if (i + 1 < argc) {
                 std::istringstream stream(argv[++i]);
-                stream >> *choice;
+                stream >> choice;
             } else {
                 std::cerr << "--bresenham option requires one argument" << std::endl;
                 return false;

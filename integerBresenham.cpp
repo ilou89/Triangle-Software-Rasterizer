@@ -1,7 +1,7 @@
 #include "integerBresenham.h"
 
-IntegerBresenham::IntegerBresenham(Bitmap& bmp)
- : BaseBresenham(bmp)
+IntegerBresenham::IntegerBresenham(Bitmap& bmp, ModelLoader& model)
+ : BaseBresenham(bmp, model)
 {
 
 }

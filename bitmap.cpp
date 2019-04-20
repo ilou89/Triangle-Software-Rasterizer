@@ -1,6 +1,6 @@
 #include "bitmap.h"
 
-Bitmap::Bitmap(uint32_t width, uint32_t height)
+Bitmap::Bitmap(unsigned int width, unsigned int height)
  : width(width),
    height(height),
    data(nullptr)
@@ -42,7 +42,7 @@ Bitmap::~Bitmap()
 }
 
 bool
-Bitmap::setPixel(uint32_t x, uint32_t y, const Color& color)
+Bitmap::setPixel(unsigned int x, unsigned int y, const Color& color)
 {
     uint8_t *raw_data = data.get();
     memcpy(raw_data + (x + y * width) * RGB, color.raw, RGB);
@@ -80,5 +80,17 @@ void Bitmap::fillHeaders(FileHeader& fileHeader, InfoHeader& infoHeader)
 
     infoHeader.width = width;
     infoHeader.height = height;
+}
+
+unsigned int
+Bitmap::getWidth() const
+{
+    return this->width;
+}
+
+unsigned int
+Bitmap::getHeight() const
+{
+    return this->height;
 }
 

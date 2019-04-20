@@ -64,7 +64,7 @@ ModelLoader::fillVectors(std::ifstream& myfile)
                 stream >> space;
 
                 stream >> dummy;
-                tempIndex.push_back(index);
+                tempIndex.push_back(index - 1);
             }
 
             indices.push_back(tempIndex);
@@ -73,5 +73,29 @@ ModelLoader::fillVectors(std::ifstream& myfile)
             std::cout << line << std::endl;
         }
     }
+}
+
+int
+ModelLoader::verticesSize()
+{
+    return static_cast<int>(vertices.size());
+}
+
+int
+ModelLoader::indicesSize()
+{
+    return static_cast<int>(indices.size());
+}
+
+std::vector<int>
+ModelLoader::getIndicesAt(int index)
+{
+    return indices[index];
+}
+
+Vec3f
+ModelLoader::getVerticesAt(int index)
+{
+    return vertices[index];
 }
 
