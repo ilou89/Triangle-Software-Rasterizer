@@ -9,14 +9,15 @@ static const unsigned int WIDTH = 800;
 static const unsigned int HEIGHT = 600;
 
 static void printUsage(std::string name);
-static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice);
+static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice, bool &xmlSVG);
 
 int main(int argc, char *argv[]) {
     std::unique_ptr<BaseBresenham> lineDrawer;
     std::string filename;
     int choice;
+    bool xmlSVG;
 
-    if (!parseArguments(argc, argv, filename, choice)) {
+    if (!parseArguments(argc, argv, filename, choice, xmlSVG)) {
         return 1;
     }
 
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]) {
         lineDrawer->drawLines();
     }
 
-    lineDrawer->wireframe();
+    lineDrawer->wireframe(xmlSVG);
 
     auto end = std::chrono::system_clock::now();
     auto elapsed =
@@ -52,6 +53,7 @@ static void printUsage(std::string name) {
     std::cerr << "Usage " << name << " [ options ]\n"
               << "options:\n"
               << "\t-h, --help\t\t Show this help message\n"
+              << "\t-s, --svg \t\t Write coordinates into SVG file for offline rendering\n"
               << "\t-f, --filename  FILE\t Specify the path of the .obj file\n"
               << "\t-b, --bresenham CHOICE\t Specify the drawing algorithm\n"
               << "\t\t\tChoices are: 1 for simpleBresenham\n"
@@ -60,9 +62,10 @@ static void printUsage(std::string name) {
               << std::endl;
 }
 
-static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice) {
+static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice, bool &xmlSVG) {
     filename = "obj/cube.obj";
     choice = 1;
+    xmlSVG = false;
 
     if (argc == 1) {
         printUsage(argv[0]);
@@ -92,6 +95,8 @@ static bool parseArguments(int argc, char *argv[], std::string &filename, int &c
                 std::cerr << "--bresenham option requires one argument" << std::endl;
                 return false;
             }
+        } else if ((arg == "-s") || (arg == "--svg")) {
+                xmlSVG = true;
         }
     }
 

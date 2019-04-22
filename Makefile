@@ -20,4 +20,5 @@ clean:
 	-rm -f $(OBJECTS)
 	-rm -f $(TARGET)
 	-rm -f *.bmp
+	-rm -f *.svg
 

@@ -21,7 +21,7 @@ public:
     BaseBresenham(Bitmap& bmp, ModelLoader& model);
     virtual ~BaseBresenham();
     void drawLines();
-    void wireframe();
+    bool wireframe(bool xmlSVG);
 };
 
 #endif //__BASEBRESENHAM_H__

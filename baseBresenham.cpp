@@ -147,11 +147,21 @@ BaseBresenham::diagonal(unsigned int x0, unsigned int y0, int dx, int xDirection
     }
 }
 
-void
-BaseBresenham::wireframe()
+bool
+BaseBresenham::wireframe(bool xmlSVG)
 {
     unsigned int width = bmp.getWidth();
     unsigned int height = bmp.getHeight();
+
+	std::ofstream file;
+	if (xmlSVG) {
+		file.open("./lines.svg");
+		if (!file.is_open()) {
+			return false;
+		}
+		file << "<svg version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\" height=\""
+             << height << "\" width=\"" << width << "\">" << std::endl;
+	}
 
     for (int i = 0; i < model.indicesSize(); ++i) {
         std::vector<int> face = model.getIndicesAt(i);
@@ -184,7 +194,21 @@ BaseBresenham::wireframe()
             int y1_proj_pix  = static_cast<int>(y1_proj_remap * height);
 
             line(x0_proj_pix, y0_proj_pix, x1_proj_pix, y1_proj_pix, WHITE);
+
+			if (xmlSVG) {
+            	file << "<line x1=\"" << x0_proj_pix << "\" y1=\""
+                     << height - y0_proj_pix << "\" x2=\"" << x1_proj_pix
+                     << "\" y2=\"" << height - y1_proj_pix
+                     << "\" style=\"stroke:rgb(0,0,0);stroke-width:1\" />\n";
+			}
         }
     }
+
+	if (xmlSVG) {
+		file << "</svg>\n";
+		file.close();
+	}
+
+	return true;
 }
 
