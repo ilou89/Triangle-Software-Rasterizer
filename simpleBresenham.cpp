@@ -1,7 +1,7 @@
 #include "simpleBresenham.h"
 
-SimpleBresenham::SimpleBresenham(Bitmap& bmp, ModelLoader& model)
- : BaseBresenham(bmp, model)
+SimpleBresenham::SimpleBresenham(Bitmap& bmp)
+ : BaseBresenham(bmp)
 {
 
 }

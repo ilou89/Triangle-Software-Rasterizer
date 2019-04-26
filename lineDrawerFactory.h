@@ -6,7 +6,6 @@
 #include "integerBresenham.h"
 #include "sliceBresenham.h"
 #include "bitmap.h"
-#include "modelLoader.h"
 
 #include <memory>
 
@@ -16,8 +15,7 @@ public:
     virtual ~LineDrawerFactory();
 
     static std::unique_ptr<BaseBresenham> makeLineDrawer(int choice,
-                                                         Bitmap &bmp,
-                                                         ModelLoader& model);
+                                                         Bitmap &bmp);
 };
 
 #endif //__FACTORYLINEDRAWER_H__

@@ -1,6 +1,6 @@
 #include "bitmap.h"
-#include "lineDrawerFactory.h"
 #include "modelLoader.h"
+#include "renderer.h"
 
 #include <chrono>
 #include <iostream>
@@ -12,7 +12,6 @@ static void printUsage(std::string name);
 static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice, bool &xmlSVG);
 
 int main(int argc, char *argv[]) {
-    std::unique_ptr<BaseBresenham> lineDrawer;
     std::string filename;
     int choice;
     bool xmlSVG;
@@ -28,16 +27,16 @@ int main(int argc, char *argv[]) {
     }
 
     Bitmap bitmap(WIDTH, HEIGHT);
-
-    lineDrawer = LineDrawerFactory::makeLineDrawer(choice, bitmap, mdloader);
+    Renderer renderer(choice, bitmap, mdloader);
 
     auto start = std::chrono::system_clock::now();
 
     for (uint32_t i = 0; i < 1000; i++) {
-        lineDrawer->drawLines();
+        renderer.drawLines();
     }
 
-    lineDrawer->wireframe(xmlSVG);
+    renderer.wireframe(xmlSVG);
+    renderer.triangle();
 
     auto end = std::chrono::system_clock::now();
     auto elapsed =

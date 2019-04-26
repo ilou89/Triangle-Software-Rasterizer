@@ -9,7 +9,7 @@ private:
     void octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) override;
 
 public:
-    SimpleBresenham(Bitmap& bmp, ModelLoader& model);
+    SimpleBresenham(Bitmap& bmp);
     ~SimpleBresenham();
 };
 
