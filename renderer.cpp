@@ -1,9 +1,10 @@
 #include "renderer.h"
 
-const Color RED   = Color(255, 0, 0, 255);
-const Color GREEN = Color(0, 255, 0, 255);
-const Color BLUE  = Color(0, 0, 255, 255);
-const Color WHITE = Color(255, 255, 255, 255);
+const Color RED    = Color(255, 0, 0, 255);
+const Color GREEN  = Color(0, 255, 0, 255);
+const Color BLUE   = Color(0, 0, 255, 255);
+const Color WHITE  = Color(255, 255, 255, 255);
+const Color PURPLE = Color(128, 0, 128, 255);
 
 Renderer::Renderer(int choice, Bitmap &bitmap, ModelLoader &model)
  : bmp(bitmap), model(model)
@@ -156,5 +157,29 @@ Renderer::wireframe(bool xmlSVG)
 	}
 
 	return true;
+}
+
+void
+Renderer::fillBottomFlatTriangle()
+{
+    lineDrawer->line(100, 100, 50, 50, PURPLE);
+    lineDrawer->line(150, 50, 100, 100, PURPLE);
+    lineDrawer->line(50, 50, 150, 50, PURPLE);
+
+    Vertex vertex0(100, 100);
+    Vertex vertex1(50, 50);
+    Vertex vertex2(150, 50);
+
+    float invslope1 = (100 - 50) / (100 - 50);
+    float invslope2 = (150 - 100) / (100 - 50);
+
+    unsigned int curx1 = 50;
+    unsigned int curx2 = 150;
+
+    for (unsigned int scanline = vertex1.y; scanline <= vertex0.y; ++scanline) {
+        lineDrawer->line((unsigned int)curx1, scanline, (unsigned int)curx2, scanline, GREEN);
+        curx1 += invslope1;
+        curx2 -= invslope2;
+    }
 }
 

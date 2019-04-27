@@ -4,6 +4,7 @@
 #include "bitmap.h"
 #include "modelLoader.h"
 #include "lineDrawerFactory.h"
+#include "utils.h"
 
 class Renderer {
 private:
@@ -16,6 +17,7 @@ public:
     ~Renderer();
 
     void drawLines();
+    void fillBottomFlatTriangle();
     void triangle();
     bool wireframe(bool xmlSVG);
 };
