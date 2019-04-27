@@ -126,6 +126,19 @@ Renderer::wireframe(bool xmlSVG)
             int x1_proj_pix  = static_cast<int>(x1_proj_remap * width);
             int y1_proj_pix  = static_cast<int>(y1_proj_remap * height);
 
+            if (x0_proj_pix >= static_cast<int>(width)) {
+                x0_proj_pix = static_cast<int>(width - 1);
+            }
+            if (x1_proj_pix >= static_cast<int>(width)) {
+                x1_proj_pix = static_cast<int>(width - 1);
+            }
+            if (y0_proj_pix >= static_cast<int>(height)) {
+                y0_proj_pix = static_cast<int>(height - 1);
+            }
+            if (y1_proj_pix >= static_cast<int>(height)) {
+                y1_proj_pix = static_cast<int>(height - 1);
+            }
+
             lineDrawer->line(x0_proj_pix, y0_proj_pix, x1_proj_pix, y1_proj_pix, WHITE);
 
 			if (xmlSVG) {
