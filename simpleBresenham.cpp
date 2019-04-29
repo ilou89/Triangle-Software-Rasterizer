@@ -12,40 +12,40 @@ SimpleBresenham::~SimpleBresenham()
 }
 
 void
-SimpleBresenham::octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color)
+SimpleBresenham::octant03(Point2D p, int dx, int dy, int xDirection, const Color& color)
 {
     float error = 0.0f;
     float slope = (float)dy / (float)dx;
 
-    bmp.setPixel(x, y, color);
+    bmp.setPixel(p, color);
     while(dx--) {
         error += slope;
         if(error >= 0.5f) {
-            y++;
+            p.y++;
             error -= 1.0f;
         }
 
-        x += xDirection;
-        bmp.setPixel(x, y, color);
+        p.x += xDirection;
+        bmp.setPixel(p, color);
     }
 }
 
 void
-SimpleBresenham::octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color)
+SimpleBresenham::octant12(Point2D p, int dx, int dy, int xDirection, const Color& color)
 {
     float error = 0.0f;
     float slope = (float)dx / (float)dy;
 
-    bmp.setPixel(x, y, color);
+    bmp.setPixel(p, color);
     while(dy--) {
         error += slope;
         if(error >= 0.5f) {
-            x += xDirection;
+            p.x += xDirection;
             error -= 1.0f;
         }
 
-        y++;
-        bmp.setPixel(x, y, color);
+        p.y++;
+        bmp.setPixel(p, color);
     }
 }
 

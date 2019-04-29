@@ -42,10 +42,10 @@ Bitmap::~Bitmap()
 }
 
 bool
-Bitmap::setPixel(unsigned int x, unsigned int y, const Color& color)
+Bitmap::setPixel(Point2D p, const Color& color)
 {
     uint8_t *raw_data = data.get();
-    memcpy(raw_data + (x + y * width) * RGB, color.raw, RGB);
+    memcpy(raw_data + (p.x + p.y * width) * RGB, color.raw, RGB);
 
     return true;
 }

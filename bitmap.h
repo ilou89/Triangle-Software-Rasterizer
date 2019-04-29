@@ -1,6 +1,8 @@
 #ifndef __BMPIMAGE_H__
 #define __BMPIMAGE_H__
 
+#include "geometry.h"
+
 #include <cstdint>
 #include <memory>
 #include <cstring>
@@ -83,7 +85,7 @@ public:
     Bitmap& operator=(const Bitmap& rhs);
     ~Bitmap();
 
-    bool setPixel(unsigned int x, unsigned int y, const Color& color);
+    bool setPixel(Point2D p, const Color& color);
     bool write(const char* filename);
     unsigned int getWidth() const;
     unsigned int getHeight() const;

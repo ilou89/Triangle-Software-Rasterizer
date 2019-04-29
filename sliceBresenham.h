@@ -5,10 +5,10 @@
 
 class SliceBresenham: public BaseBresenham {
 private:
-    void octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) override;
-    void octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) override;
-    void horizontalSlice(unsigned int& x, unsigned int y, int xDirection, int startSlice, const Color& color);
-    void verticalSlice(unsigned int x, unsigned int& y, int runSlice, const Color& color);
+    void octant03(Point2D p, int dx, int dy, int xDirection, const Color& color) override;
+    void octant12(Point2D p, int dx, int dy, int xDirection, const Color& color) override;
+    void horizontalSlice(Point2D &p, int xDirection, int startSlice, const Color& color);
+    void verticalSlice(Point2D &p, int runSlice, const Color& color);
 
 public:
     SliceBresenham(Bitmap& bmp);

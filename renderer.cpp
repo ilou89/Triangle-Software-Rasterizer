@@ -20,65 +20,13 @@ Renderer::~Renderer()
 void
 Renderer::triangle()
 {
-    lineDrawer->line(10, 70, 50, 160, RED);
-    lineDrawer->line(50, 160, 70, 80, RED);
-    lineDrawer->line(70, 80, 10, 70, RED);
-}
+    Point2D p0(10, 70);
+    Point2D p1(50, 160);
+    Point2D p2(70, 80);
 
-void
-Renderer::drawLines()
-{
-    //y increasing octants 0-3
-    lineDrawer->line(13, 20, 500, 400, WHITE);
-    bmp.setPixel(13, 20, RED);
-    bmp.setPixel(500, 400, RED);
-    lineDrawer->line(20, 13, 400, 500, GREEN);
-    bmp.setPixel(20, 13, RED);
-    bmp.setPixel(400, 500, RED);
-    lineDrawer->line(400, 130, 200, 550, WHITE);
-    bmp.setPixel(400, 130, RED);
-    bmp.setPixel(200, 550, RED);
-    lineDrawer->line(790, 200, 130, 400, GREEN);
-    bmp.setPixel(790, 200, RED);
-    bmp.setPixel(130, 400, RED);
-
-    //y increasing octants 4-7
-    lineDrawer->line(700, 500, 10, 10, BLUE);
-    bmp.setPixel(700, 500, RED);
-    bmp.setPixel(10, 10, RED);
-    lineDrawer->line(500, 550, 10, 13, WHITE);
-    bmp.setPixel(500, 550, RED);
-    bmp.setPixel(10, 13, RED);
-    lineDrawer->line(200, 50, 350, 450, BLUE);
-    bmp.setPixel(200, 50, RED);
-    bmp.setPixel(350, 450, RED);
-    lineDrawer->line(50, 590, 790, 100, GREEN);
-    bmp.setPixel(50, 590, RED);
-    bmp.setPixel(790, 100, RED);
-
-    //vertical
-    lineDrawer->line(600, 100, 600, 500, RED);
-    bmp.setPixel(600, 100, WHITE);
-    bmp.setPixel(600, 500, WHITE);
-    lineDrawer->line(200, 500, 200, 100, RED);
-    bmp.setPixel(200, 500, WHITE);
-    bmp.setPixel(200, 100, WHITE);
-
-    //horizontal
-    lineDrawer->line(200, 500, 600, 500, RED);
-    bmp.setPixel(200, 500, WHITE);
-    bmp.setPixel(600, 500, WHITE);
-    lineDrawer->line(600, 100, 200, 100, RED);
-    bmp.setPixel(600, 100, WHITE);
-    bmp.setPixel(200, 100, WHITE);
-
-    //diagonal
-    lineDrawer->line(200, 100, 600, 500, RED);
-    bmp.setPixel(200, 100, WHITE);
-    bmp.setPixel(600, 500, WHITE);
-    lineDrawer->line(600, 100, 200, 500, RED);
-    bmp.setPixel(600, 100, WHITE);
-    bmp.setPixel(200, 500, WHITE);
+    lineDrawer->line(p0, p1, RED);
+    lineDrawer->line(p1, p2, RED);
+    lineDrawer->line(p2, p0, RED);
 }
 
 bool
@@ -122,30 +70,32 @@ Renderer::wireframe(bool xmlSVG)
              * Express normalized coordinates in terms of pixels
              * Raster Space
              */
-            int x0_proj_pix  = static_cast<int>(x0_proj_remap * width);
-            int y0_proj_pix  = static_cast<int>(y0_proj_remap * height);
-            int x1_proj_pix  = static_cast<int>(x1_proj_remap * width);
-            int y1_proj_pix  = static_cast<int>(y1_proj_remap * height);
+            Point2D p0_proj;
+            p0_proj.x  = static_cast<unsigned int>(x0_proj_remap * width);
+            p0_proj.y = static_cast<unsigned int>(y0_proj_remap * height);
+            Point2D p1_proj;
+            p1_proj.x = static_cast<unsigned int>(x1_proj_remap * width);
+            p1_proj.y = static_cast<unsigned int>(y1_proj_remap * height);
 
-            if (x0_proj_pix >= static_cast<int>(width)) {
-                x0_proj_pix = static_cast<int>(width - 1);
+            if (p0_proj.x >= width) {
+                p0_proj.x = width - 1;
             }
-            if (x1_proj_pix >= static_cast<int>(width)) {
-                x1_proj_pix = static_cast<int>(width - 1);
+            if (p1_proj.x >= width) {
+                p1_proj.x = width - 1;
             }
-            if (y0_proj_pix >= static_cast<int>(height)) {
-                y0_proj_pix = static_cast<int>(height - 1);
+            if (p0_proj.y >= height) {
+                p0_proj.y = height - 1;
             }
-            if (y1_proj_pix >= static_cast<int>(height)) {
-                y1_proj_pix = static_cast<int>(height - 1);
+            if (p1_proj.y >= height) {
+                p1_proj.y = height - 1;
             }
 
-            lineDrawer->line(x0_proj_pix, y0_proj_pix, x1_proj_pix, y1_proj_pix, WHITE);
+            lineDrawer->line(p0_proj, p1_proj, WHITE);
 
 			if (xmlSVG) {
-            	file << "<line x1=\"" << x0_proj_pix << "\" y1=\""
-                     << height - y0_proj_pix << "\" x2=\"" << x1_proj_pix
-                     << "\" y2=\"" << height - y1_proj_pix
+            	file << "<line x1=\"" << p0_proj.x << "\" y1=\""
+                     << height - p0_proj.y << "\" x2=\"" << p1_proj.x
+                     << "\" y2=\"" << height - p1_proj.y
                      << "\" style=\"stroke:rgb(0,0,0);stroke-width:1\" />\n";
 			}
         }
@@ -159,27 +109,28 @@ Renderer::wireframe(bool xmlSVG)
 	return true;
 }
 
-void
-Renderer::fillBottomFlatTriangle()
-{
-    lineDrawer->line(100, 100, 50, 50, PURPLE);
-    lineDrawer->line(150, 50, 100, 100, PURPLE);
-    lineDrawer->line(50, 50, 150, 50, PURPLE);
-
-    Vertex vertex0(100, 100);
-    Vertex vertex1(50, 50);
-    Vertex vertex2(150, 50);
-
-    float invslope1 = (100 - 50) / (100 - 50);
-    float invslope2 = (150 - 100) / (100 - 50);
-
-    unsigned int curx1 = 50;
-    unsigned int curx2 = 150;
-
-    for (unsigned int scanline = vertex1.y; scanline <= vertex0.y; ++scanline) {
-        lineDrawer->line((unsigned int)curx1, scanline, (unsigned int)curx2, scanline, GREEN);
-        curx1 += invslope1;
-        curx2 -= invslope2;
-    }
-}
+//void
+//Renderer::fillBottomFlatTriangle()
+//{
+//    Point2D vertex0(100, 100);
+//    Point2D vertex1(50, 50);
+//    Point2D vertex2(150, 50);
+//
+//    lineDrawer->line(vertex0, vertex1, PURPLE);
+//    lineDrawer->line(vertex2, vertex0, PURPLE);
+//    lineDrawer->line(vertex1, vertex2, PURPLE);
+//
+//
+//    float invslope1 = (100 - 50) / (100 - 50);
+//    float invslope2 = (150 - 100) / (100 - 50);
+//
+//    unsigned int curx1 = 50;
+//    unsigned int curx2 = 150;
+//
+//    for (unsigned int scanline = vertex1.y; scanline <= vertex0.y; ++scanline) {
+//        lineDrawer->line((unsigned int)curx1, scanline, (unsigned int)curx2, scanline, GREEN);
+//        curx1 += invslope1;
+//        curx2 -= invslope2;
+//    }
+//}
 

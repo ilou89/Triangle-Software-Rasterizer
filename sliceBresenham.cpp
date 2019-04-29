@@ -12,7 +12,7 @@ SliceBresenham::~SliceBresenham()
 }
 
 void
-SliceBresenham::octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color)
+SliceBresenham::octant03(Point2D p, int dx, int dy, int xDirection, const Color& color)
 {
     int runSlice = dx / dy;
     int upError = (dx % dy) * 2;
@@ -29,7 +29,8 @@ SliceBresenham::octant03(unsigned int x, unsigned int y, int dx, int dy, int xDi
         error += dy;
     }
 
-    horizontalSlice(x, y++, xDirection, startSlice, color);
+    p.y++;
+    horizontalSlice(p, xDirection, startSlice, color);
     dy--;
     while(dy--) {
         int runLength = runSlice;
@@ -37,13 +38,14 @@ SliceBresenham::octant03(unsigned int x, unsigned int y, int dx, int dy, int xDi
             runLength++;
             error -= downError;
         }
-        horizontalSlice(x, y++, xDirection, runLength, color);
+        p.y++;
+        horizontalSlice(p, xDirection, runLength, color);
     }
-    horizontalSlice(x, y, xDirection, endSlice, color);
+    horizontalSlice(p, xDirection, endSlice, color);
 }
 
 void
-SliceBresenham::octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color)
+SliceBresenham::octant12(Point2D p, int dx, int dy, int xDirection, const Color& color)
 {
     int runSlice = dy / dx;
     int upError = (dy % dx) * 2;
@@ -60,8 +62,8 @@ SliceBresenham::octant12(unsigned int x, unsigned int y, int dx, int dy, int xDi
         error += dx;
     }
 
-    verticalSlice(x, y, startSlice, color);
-    x += xDirection;
+    verticalSlice(p, startSlice, color);
+    p.x += xDirection;
     dx--;
     while(dx--) {
         int runLength = runSlice;
@@ -69,26 +71,27 @@ SliceBresenham::octant12(unsigned int x, unsigned int y, int dx, int dy, int xDi
             runLength++;
             error -= downError;
         }
-        verticalSlice(x, y, runLength, color);
-        x += xDirection;
+        verticalSlice(p, runLength, color);
+        p.x += xDirection;
     }
-    verticalSlice(x, y, endSlice, color);
+    verticalSlice(p, endSlice, color);
 }
 
 void
-SliceBresenham::horizontalSlice(unsigned int& x, unsigned int y, int xDirection, int runSlice, const Color& color)
+SliceBresenham::horizontalSlice(Point2D &p, int xDirection, int runSlice, const Color& color)
 {
     for(int i = 0; i < runSlice; i++) {
-        bmp.setPixel(x, y, color);
-        x += xDirection;
+        bmp.setPixel(p, color);
+        p.x += xDirection;
     }
 }
 
 void
-SliceBresenham::verticalSlice(unsigned int x, unsigned int& y, int runSlice, const Color& color)
+SliceBresenham::verticalSlice(Point2D &p, int runSlice, const Color& color)
 {
     for(int i = 0; i < runSlice; i++) {
-        bmp.setPixel(x, y++, color);
+        p.y++;
+        bmp.setPixel(p, color);
     }
 }
 

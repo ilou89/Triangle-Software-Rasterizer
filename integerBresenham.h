@@ -5,8 +5,8 @@
 
 class IntegerBresenham: public BaseBresenham {
 private:
-    void octant03(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) override;
-    void octant12(unsigned int x, unsigned int y, int dx, int dy, int xDirection, const Color& color) override;
+    void octant03(Point2D p, int dx, int dy, int xDirection, const Color& color) override;
+    void octant12(Point2D p, int dx, int dy, int xDirection, const Color& color) override;
 
 public:
     IntegerBresenham(Bitmap& bmp);

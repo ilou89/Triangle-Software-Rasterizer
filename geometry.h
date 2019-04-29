@@ -27,6 +27,7 @@ public:
 
 typedef Vec2<float> Vec2f;
 typedef Vec2<int> Vec2i;
+typedef Vec2<unsigned int> Point2D;
 
 template<typename T>
 class Vec3 {

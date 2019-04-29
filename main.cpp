@@ -31,13 +31,12 @@ int main(int argc, char *argv[]) {
 
     auto start = std::chrono::system_clock::now();
 
-    for (uint32_t i = 0; i < 1000; i++) {
-        renderer.drawLines();
+    for (uint32_t i = 0; i < 100; i++) {
+        renderer.wireframe(xmlSVG);
     }
 
-    renderer.wireframe(xmlSVG);
     renderer.triangle();
-    renderer.fillBottomFlatTriangle();
+    //renderer.fillBottomFlatTriangle();
 
     auto end = std::chrono::system_clock::now();
     auto elapsed =

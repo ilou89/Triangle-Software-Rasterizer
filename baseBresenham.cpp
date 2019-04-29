@@ -12,18 +12,17 @@ BaseBresenham::~BaseBresenham()
 }
 
 void
-BaseBresenham::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color)
+BaseBresenham::line(Point2D p0, Point2D p1, const Color& color)
 {
     int xDirection = 1;
     int dx, dy;
 
-    if(y0 > y1) {
-        std::swap(y0, y1);
-        std::swap(x0, x1);
+    if(p0.y > p1.y) {
+        std::swap(p0, p1);
     }
 
-    dx = x1 - x0;
-    dy = y1 - y0;
+    dx = p1.x - p0.x;
+    dy = p1.y - p0.y;
 
     if(dx < 0) {
         dx = -dx;
@@ -32,57 +31,57 @@ BaseBresenham::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned 
 
     //vertical line
     if(dx == 0) {
-        vertical(x0, y0, dy, color);
+        vertical(p0, dy, color);
         return;
     }
 
     //horizontal line
     if(dy == 0){
-        horizontal(x0, y0, dx, xDirection, color);
+        horizontal(p0, dx, xDirection, color);
         return;
     }
 
     //diagonal line
     if(dx == dy){
-        diagonal(x0, y0, dx, xDirection, color);
+        diagonal(p0, dx, xDirection, color);
         return;
     }
 
     if(dx > dy) {
-        octant03(x0, y0, dx, dy, xDirection, color);
+        octant03(p0, dx, dy, xDirection, color);
     } else {
-        octant12(x0, y0, dx, dy, xDirection, color);
+        octant12(p0, dx, dy, xDirection, color);
     }
 }
 
 void
-BaseBresenham::vertical(unsigned int x0, unsigned int y0, int dy, const Color& color)
+BaseBresenham::vertical(Point2D p, int dy, const Color& color)
 {
-    bmp.setPixel(x0, y0, color);
+    bmp.setPixel(p, color);
     while(dy--) {
-        y0++;
-        bmp.setPixel(x0, y0, color);
+        p.y++;
+        bmp.setPixel(p, color);
     }
 }
 
 void
-BaseBresenham::horizontal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color)
+BaseBresenham::horizontal(Point2D p, int dx, int xDirection, const Color& color)
 {
-    bmp.setPixel(x0, y0, color);
+    bmp.setPixel(p, color);
     while(dx--) {
-        x0 += xDirection;
-        bmp.setPixel(x0, y0, color);
+        p.x += xDirection;
+        bmp.setPixel(p, color);
     }
 }
 
 void
-BaseBresenham::diagonal(unsigned int x0, unsigned int y0, int dx, int xDirection, const Color& color)
+BaseBresenham::diagonal(Point2D p, int dx, int xDirection, const Color& color)
 {
-    bmp.setPixel(x0, y0, color);
+    bmp.setPixel(p, color);
     while(dx--) {
-        x0 += xDirection;
-        y0++;
-        bmp.setPixel(x0, y0, color);
+        p.x += xDirection;
+        p.y++;
+        bmp.setPixel(p, color);
     }
 }
 
