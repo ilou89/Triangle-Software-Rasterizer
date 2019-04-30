@@ -2,10 +2,17 @@
 #define __BASEBRESENHAM_H__
 
 #include "bitmap.h"
+#include <vector>
 
 class BaseBresenham {
 protected:
     Bitmap& bmp;
+    /**
+     * stores the x coordinates when a line is drawn
+     * and it is used by the rasterization to find
+     * the outline of the triangle to fill
+     */
+    std::vector<unsigned int> xCoords;
 
 private:
     virtual void octant03(Point2D p, int dx, int dy, int xDirection, const Color& color) = 0;
@@ -18,6 +25,7 @@ public:
     BaseBresenham(Bitmap& bmp);
     virtual ~BaseBresenham();
 
+    std::vector<unsigned int> getXCoords();
     void line(Point2D p0, Point2D p1, const Color& color);
 };
 

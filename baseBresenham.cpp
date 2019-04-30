@@ -17,6 +17,8 @@ BaseBresenham::line(Point2D p0, Point2D p1, const Color& color)
     int xDirection = 1;
     int dx, dy;
 
+    xCoords.clear();
+
     if(p0.y > p1.y) {
         std::swap(p0, p1);
     }
@@ -58,9 +60,11 @@ void
 BaseBresenham::vertical(Point2D p, int dy, const Color& color)
 {
     bmp.setPixel(p, color);
+    xCoords.push_back(p.x);
     while(dy--) {
         p.y++;
         bmp.setPixel(p, color);
+        xCoords.push_back(p.x);
     }
 }
 
@@ -68,9 +72,11 @@ void
 BaseBresenham::horizontal(Point2D p, int dx, int xDirection, const Color& color)
 {
     bmp.setPixel(p, color);
+    xCoords.push_back(p.x);
     while(dx--) {
         p.x += xDirection;
         bmp.setPixel(p, color);
+        xCoords.push_back(p.x);
     }
 }
 
@@ -78,10 +84,18 @@ void
 BaseBresenham::diagonal(Point2D p, int dx, int xDirection, const Color& color)
 {
     bmp.setPixel(p, color);
+    xCoords.push_back(p.x);
     while(dx--) {
         p.x += xDirection;
         p.y++;
         bmp.setPixel(p, color);
+        xCoords.push_back(p.x);
     }
+}
+
+std::vector<unsigned int>
+BaseBresenham::getXCoords()
+{
+    return xCoords;
 }
 

@@ -18,15 +18,44 @@ Renderer::~Renderer()
 }
 
 void
-Renderer::triangle()
+Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
 {
-    Point2D p0(10, 70);
-    Point2D p1(50, 160);
-    Point2D p2(70, 80);
+    std::vector<unsigned int> p0;
+    std::vector<unsigned int> p1;
+    std::vector<unsigned int> p2;
 
-    lineDrawer->line(p0, p1, RED);
-    lineDrawer->line(p1, p2, RED);
-    lineDrawer->line(p2, p0, RED);
+    if (v0.y > v1.y) {
+        std::swap(v0, v1);
+    }
+    if (v0.y > v2.y) {
+        std::swap(v0, v2);
+    }
+    if (v1.y > v2.y) {
+        std::swap(v1, v2);
+    }
+
+    lineDrawer->line(v0, v1, PURPLE);
+    p0 = lineDrawer->getXCoords();
+    p0.pop_back();
+    lineDrawer->line(v1, v2, PURPLE);
+    p1 = lineDrawer->getXCoords();
+    lineDrawer->line(v2, v0, RED);
+    p2 = lineDrawer->getXCoords();
+
+    p0.insert(p0.end(), p1.begin(), p1.end());
+
+    int i = 0;
+    for (unsigned int y = v0.y; y < v2.y; y++) {
+        Point2D pStart(p2[i], y);
+        Point2D pEnd(p0[i], y);
+        i++;
+
+        lineDrawer->line(pEnd, pStart, GREEN);
+    }
+    lineDrawer->line(v0, v1, PURPLE);
+    lineDrawer->line(v1, v2, PURPLE);
+    lineDrawer->line(v2, v0, RED);
+    p2 = lineDrawer->getXCoords();
 }
 
 bool
@@ -109,28 +138,22 @@ Renderer::wireframe(bool xmlSVG)
 	return true;
 }
 
-//void
-//Renderer::fillBottomFlatTriangle()
-//{
-//    Point2D vertex0(100, 100);
-//    Point2D vertex1(50, 50);
-//    Point2D vertex2(150, 50);
-//
-//    lineDrawer->line(vertex0, vertex1, PURPLE);
-//    lineDrawer->line(vertex2, vertex0, PURPLE);
-//    lineDrawer->line(vertex1, vertex2, PURPLE);
-//
-//
-//    float invslope1 = (100 - 50) / (100 - 50);
-//    float invslope2 = (150 - 100) / (100 - 50);
-//
-//    unsigned int curx1 = 50;
-//    unsigned int curx2 = 150;
-//
-//    for (unsigned int scanline = vertex1.y; scanline <= vertex0.y; ++scanline) {
-//        lineDrawer->line((unsigned int)curx1, scanline, (unsigned int)curx2, scanline, GREEN);
-//        curx1 += invslope1;
-//        curx2 -= invslope2;
-//    }
-//}
+void
+Renderer::rasterize()
+{
+    Point2D v0(10, 70);
+    Point2D v1(50, 160);
+    Point2D v2(70, 80);
+    fillTriangle(v0, v1, v2);
+
+    Point2D v3(180, 50);
+    Point2D v4(150, 1);
+    Point2D v5(70, 180);
+    fillTriangle(v3, v4, v5);
+
+    Point2D v6(180, 150);
+    Point2D v7(120, 160);
+    Point2D v8(130, 180);
+    fillTriangle(v6, v7, v8);
+}
 

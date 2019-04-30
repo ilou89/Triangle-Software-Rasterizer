@@ -18,11 +18,13 @@ SimpleBresenham::octant03(Point2D p, int dx, int dy, int xDirection, const Color
     float slope = (float)dy / (float)dx;
 
     bmp.setPixel(p, color);
+    xCoords.push_back(p.x);
     while(dx--) {
         error += slope;
         if(error >= 0.5f) {
             p.y++;
             error -= 1.0f;
+            xCoords.push_back(p.x);
         }
 
         p.x += xDirection;
@@ -37,6 +39,7 @@ SimpleBresenham::octant12(Point2D p, int dx, int dy, int xDirection, const Color
     float slope = (float)dx / (float)dy;
 
     bmp.setPixel(p, color);
+    xCoords.push_back(p.x);
     while(dy--) {
         error += slope;
         if(error >= 0.5f) {
@@ -46,6 +49,7 @@ SimpleBresenham::octant12(Point2D p, int dx, int dy, int xDirection, const Color
 
         p.y++;
         bmp.setPixel(p, color);
+        xCoords.push_back(p.x);
     }
 }
 

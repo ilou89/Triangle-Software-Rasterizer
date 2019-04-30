@@ -35,8 +35,7 @@ int main(int argc, char *argv[]) {
         renderer.wireframe(xmlSVG);
     }
 
-    renderer.triangle();
-    //renderer.fillBottomFlatTriangle();
+    renderer.rasterize();
 
     auto end = std::chrono::system_clock::now();
     auto elapsed =
