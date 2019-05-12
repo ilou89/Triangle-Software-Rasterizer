@@ -44,9 +44,10 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
     if (!p0.empty()) {
         p0.pop_back();
     }
-    std::cout << p0.size() << std::endl;
+
     lineDrawer->line(v1, v2, PURPLE);
     p1 = lineDrawer->getXCoords();
+
     lineDrawer->line(v2, v0, RED);
     p2 = lineDrawer->getXCoords();
 

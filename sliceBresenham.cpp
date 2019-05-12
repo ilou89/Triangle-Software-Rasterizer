@@ -30,6 +30,7 @@ SliceBresenham::octant03(Point2D p, int dx, int dy, int xDirection, const Color&
     }
 
     p.y++;
+    xCoords.push_back(p.x);
     horizontalSlice(p, xDirection, startSlice, color);
     dy--;
     while(dy--) {
@@ -39,8 +40,10 @@ SliceBresenham::octant03(Point2D p, int dx, int dy, int xDirection, const Color&
             error -= downError;
         }
         p.y++;
+        xCoords.push_back(p.x);
         horizontalSlice(p, xDirection, runLength, color);
     }
+    xCoords.push_back(p.x);
     horizontalSlice(p, xDirection, endSlice, color);
 }
 
@@ -91,6 +94,7 @@ SliceBresenham::verticalSlice(Point2D &p, int runSlice, const Color& color)
 {
     for(int i = 0; i < runSlice; i++) {
         p.y++;
+        xCoords.push_back(p.x);
         bmp.setPixel(p, color);
     }
 }

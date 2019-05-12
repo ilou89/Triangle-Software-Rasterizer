@@ -20,11 +20,13 @@ IntegerBresenham::octant03(Point2D p, int dx, int dy, int xDirection, const Colo
     int slope = dy2;
 
     bmp.setPixel(p, color);
+    xCoords.push_back(p.x);
     while(dx--) {
         error += slope;
         if(error >= 0) {
             p.y++;
             error -= dx2;
+            xCoords.push_back(p.x);
         }
 
         p.x += xDirection;
@@ -41,6 +43,7 @@ IntegerBresenham::octant12(Point2D p, int dx, int dy, int xDirection, const Colo
     int slope = dx2;
 
     bmp.setPixel(p, color);
+    xCoords.push_back(p.x);
     while(dy--) {
         error += slope;
         if(error >= 0) {
@@ -50,6 +53,7 @@ IntegerBresenham::octant12(Point2D p, int dx, int dy, int xDirection, const Colo
 
         p.y++;
         bmp.setPixel(p, color);
+        xCoords.push_back(p.x);
     }
 }
 
