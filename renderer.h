@@ -12,6 +12,7 @@ private:
     std::unique_ptr<BaseBresenham> lineDrawer;
 
     void fillTriangle(Point2D v0, Point2D v1, Point2D v2);
+    void fillTriangle2(Point2D v0, Point2D v1, Point2D v2);
 
 public:
     Renderer(int choice, Bitmap &bitmap, ModelLoader &model);

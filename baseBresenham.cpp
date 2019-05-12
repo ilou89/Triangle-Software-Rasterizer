@@ -72,11 +72,9 @@ void
 BaseBresenham::horizontal(Point2D p, int dx, int xDirection, const Color& color)
 {
     bmp.setPixel(p, color);
-    xCoords.push_back(p.x);
     while(dx--) {
         p.x += xDirection;
         bmp.setPixel(p, color);
-        xCoords.push_back(p.x);
     }
 }
 

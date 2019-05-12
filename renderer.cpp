@@ -17,6 +17,7 @@ Renderer::~Renderer()
 
 }
 
+/* Line sweeping method using Bresenham */
 void
 Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
 {
@@ -34,9 +35,16 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
         std::swap(v1, v2);
     }
 
+    /*
+     * Get the coordinates of the outline
+     * of the triangle
+     */
     lineDrawer->line(v0, v1, PURPLE);
     p0 = lineDrawer->getXCoords();
-    p0.pop_back();
+    if (!p0.empty()) {
+        p0.pop_back();
+    }
+    std::cout << p0.size() << std::endl;
     lineDrawer->line(v1, v2, PURPLE);
     p1 = lineDrawer->getXCoords();
     lineDrawer->line(v2, v0, RED);
@@ -44,6 +52,10 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
 
     p0.insert(p0.end(), p1.begin(), p1.end());
 
+    /*
+     * Horizontal Bresenham between each x coordinates
+     * for each height pixel
+     */
     int i = 0;
     for (unsigned int y = v0.y; y < v2.y; y++) {
         Point2D pStart(p2[i], y);
@@ -56,6 +68,13 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
     lineDrawer->line(v1, v2, PURPLE);
     lineDrawer->line(v2, v0, RED);
     p2 = lineDrawer->getXCoords();
+}
+
+/* Barycentric method */
+void
+Renderer::fillTriangle2(Point2D v0, Point2D v1, Point2D v2)
+{
+
 }
 
 bool
@@ -155,5 +174,15 @@ Renderer::rasterize()
     Point2D v7(120, 160);
     Point2D v8(130, 180);
     fillTriangle(v6, v7, v8);
+
+    Point2D v9(300, 300);
+    Point2D v11(400, 200);
+    Point2D v10(200, 200);
+    fillTriangle(v9, v10, v11);
+
+    Point2D v12(400, 400);
+    Point2D v13(500, 500);
+    Point2D v14(300, 500);
+    fillTriangle(v12, v13, v14);
 }
 
