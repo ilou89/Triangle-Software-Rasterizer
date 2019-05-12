@@ -19,6 +19,7 @@ public:
     ~Renderer();
 
     void rasterize();
+    void render();
     bool wireframe(bool xmlSVG);
 };
 

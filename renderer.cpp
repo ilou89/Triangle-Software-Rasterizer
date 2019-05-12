@@ -187,3 +187,69 @@ Renderer::rasterize()
     fillTriangle(v12, v13, v14);
 }
 
+void
+Renderer::render()
+{
+    unsigned int width = bmp.getWidth();
+    unsigned int height = bmp.getHeight();
+
+    for (int i = 0; i < model.indicesSize(); ++i) {
+        std::vector<int> triangle = model.getIndicesAt(i);
+
+        /**
+         * Assume that the vertices read from .obj file
+         * are already projected and are in screen space,
+         * otherwise perspective division would be needed
+         */
+        Vec3f v0 = model.getVerticesAt(triangle[0]);
+        Vec3f v1 = model.getVerticesAt(triangle[1]);
+        Vec3f v2 = model.getVerticesAt(triangle[2]);
+
+        /**
+         * Normalize coordinates (from [-1,1] -> [0,1])
+         * Normalized Device Coordinates
+         */
+        float x0_proj_remap = (v0.x + 1.0f) / 2;
+        float y0_proj_remap = (v0.y + 1.0f) / 2;
+        float x1_proj_remap = (v1.x + 1.0f) / 2;
+        float y1_proj_remap = (v1.y + 1.0f) / 2;
+        float x2_proj_remap = (v2.x + 1.0f) / 2;
+        float y2_proj_remap = (v2.y + 1.0f) / 2;
+
+        /**
+         * Express normalized coordinates in terms of pixels
+         * Raster Space
+         */
+        Point2D p0_proj;
+        p0_proj.x  = static_cast<unsigned int>(x0_proj_remap * width);
+        p0_proj.y = static_cast<unsigned int>(y0_proj_remap * height);
+        Point2D p1_proj;
+        p1_proj.x = static_cast<unsigned int>(x1_proj_remap * width);
+        p1_proj.y = static_cast<unsigned int>(y1_proj_remap * height);
+        Point2D p2_proj;
+        p2_proj.x = static_cast<unsigned int>(x2_proj_remap * width);
+        p2_proj.y = static_cast<unsigned int>(y2_proj_remap * height);
+
+        if (p0_proj.x >= width) {
+            p0_proj.x = width - 1;
+        }
+        if (p1_proj.x >= width) {
+            p1_proj.x = width - 1;
+        }
+        if (p2_proj.x >= width) {
+            p2_proj.x = width - 1;
+        }
+        if (p0_proj.y >= height) {
+            p0_proj.y = height - 1;
+        }
+        if (p1_proj.y >= height) {
+            p1_proj.y = height - 1;
+        }
+        if (p2_proj.y >= height) {
+            p2_proj.y = height - 1;
+        }
+
+        fillTriangle(p0_proj, p1_proj, p2_proj);
+    }
+}
+
