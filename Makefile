@@ -1,8 +1,9 @@
 CC = g++
-CPPFLAGS = -Wall -std=c++14
+CPPFLAGS = -Wall -std=c++14 -D_REENTRANT
 LDFLAGS =
-LIBS =
+LIBS = -lSDL2
 TARGET = drawlines
+
 
 .PHONY = all clean
 
@@ -12,7 +13,6 @@ all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS)
-
 $(OBJECTS): %.o: %.cpp
 	$(CC) $(CPPFLAGS) -c $(CFLAGS) $< -o $@
 
