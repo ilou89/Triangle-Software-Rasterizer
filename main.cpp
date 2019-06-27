@@ -8,6 +8,7 @@
 
 static const unsigned int WIDTH = 800;
 static const unsigned int HEIGHT = 600;
+static bool quit = false;
 
 static void printUsage(std::string name);
 static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice, bool &xmlSVG);
@@ -56,7 +57,7 @@ int main(int argc, char *argv[]) {
     SDL_Window *window = SDL_CreateWindow("Bresenham Line Drawing Displayed by SDL2",
                                           SDL_WINDOWPOS_CENTERED,
                                           SDL_WINDOWPOS_CENTERED,
-                                          800, 600,
+                                          WIDTH, HEIGHT,
                                           0);
 
     if(!window)
@@ -83,26 +84,32 @@ int main(int argc, char *argv[]) {
     }
 
 
-    bool quit = false;
     while(!quit)
     {
-		SDL_Event e;
-		while(SDL_PollEvent(&e) > 0)
-		{
-			switch(e.type)
+	SDL_Event event;
+	while(SDL_PollEvent(&event) > 0)
+	{
+	    switch(event.type)
             {
-				case SDL_QUIT:
-					quit = true;
-					break;
-				case SDL_KEYDOWN:
-					std::cout << "keydown pressed" << std::endl;
-					break;
-			}
-
-			SDL_BlitSurface(image, NULL, window_surface, NULL);
-			SDL_UpdateWindowSurface(window);
+		case SDL_QUIT:
+		{
+		    quit = true;
+	            break;
 		}
-	}
+		case SDL_KEYDOWN:
+		{
+		    if (event.key.keysym.sym == SDLK_ESCAPE)
+		    {
+                        quit = true;
+		    }
+		    break;
+                 }
+	    }
+
+	    SDL_BlitSurface(image, NULL, window_surface, NULL);
+            SDL_UpdateWindowSurface(window);
+        }
+    }
 
     return 0;
 }
