@@ -1,10 +1,10 @@
 #include "bitmap.h"
 #include "modelLoader.h"
 #include "renderer.h"
+#include "window.h"
 
 #include <chrono>
 #include <iostream>
-#include <SDL2/SDL.h>
 
 static const unsigned int WIDTH = 800;
 static const unsigned int HEIGHT = 600;
@@ -15,6 +15,7 @@ static bool parseArguments(int argc, char *argv[], std::string &filename, int &c
 
 int main(int argc, char *argv[]) {
     std::string filename;
+    std::string imageFile = "lines.bmp";
     int choice;
     bool xmlSVG;
 
@@ -48,66 +49,30 @@ int main(int argc, char *argv[]) {
 
     bitmap.write("lines.bmp");
 
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        std::cout << "Failed to initialize the SDL2 library\n";
-        return -1;
-    }
-
-    SDL_Window *window = SDL_CreateWindow("Bresenham Line Drawing Displayed by SDL2",
-                                          SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED,
-                                          WIDTH, HEIGHT,
-                                          0);
-
-    if(!window)
-    {
-        std::cout << "Failed to create window\n";
-        return -1;
-    }
-
-    SDL_Surface *window_surface = SDL_GetWindowSurface(window);
-
-    if(!window_surface)
-    {
-        std::cout << "Failed to get the surface from the window\n";
-        return -1;
-    }
-
-    SDL_Surface *image = SDL_LoadBMP("lines.bmp");
-
-    if(!image)
-    {
-	std::cout << "Failed to load image\n";
-	std::cout << "SDL2 Error: " << SDL_GetError() << "\n";
-	return -1;
-    }
-
+    Window sdlWindow;
+    sdlWindow.CreateWindow(imageFile);
 
     while(!quit)
     {
-	SDL_Event event;
-	while(SDL_PollEvent(&event) > 0)
-	{
-	    switch(event.type)
+	    SDL_Event event;
+	    while(SDL_PollEvent(&event) > 0)
+	    {
+	        switch(event.type)
             {
-		case SDL_QUIT:
-		{
-		    quit = true;
-	            break;
-		}
-		case SDL_KEYDOWN:
-		{
-		    if (event.key.keysym.sym == SDLK_ESCAPE)
-		    {
+		        case SDL_QUIT:
+		        {
+		            quit = true;
+		        } break;
+		        case SDL_KEYDOWN:
+		        {
+		            if (event.key.keysym.sym == SDLK_ESCAPE)
+		            {
                         quit = true;
-		    }
-		    break;
-                 }
-	    }
+		            }
+                } break;
+	        }
 
-	    SDL_BlitSurface(image, NULL, window_surface, NULL);
-            SDL_UpdateWindowSurface(window);
+            sdlWindow.BlitWindow();
         }
     }
 
