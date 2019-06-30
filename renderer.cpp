@@ -63,7 +63,7 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
         Point2D pEnd(p0[i], y);
         i++;
 
-        lineDrawer->line(pEnd, pStart, GREEN);
+        lineDrawer->line(pEnd, pStart, Color(rand()%255, rand()%255, rand()%255, 255));
     }
     lineDrawer->line(v0, v1, PURPLE);
     lineDrawer->line(v1, v2, PURPLE);
@@ -75,7 +75,20 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
 void
 Renderer::fillTriangle2(Point2D v0, Point2D v1, Point2D v2)
 {
+    std::vector<Point2D> triangle;
+    triangle.push_back(v0);
+    triangle.push_back(v1);
+    triangle.push_back(v2);
 
+    Point2D bbmax(0, 0);
+    Point2D bbmin(bmp.getWidth() - 1, bmp.getHeight() - 1);
+
+    for (int i = 0; i < 3; ++i) {
+        if (triangle[i].x < bbmin.x) bbmin.x = triangle[i].x;
+        if (triangle[i].y < bbmin.y) bbmin.y = triangle[i].y;
+        if (triangle[i].x > bbmax.x) bbmax.x = triangle[i].x;
+        if (triangle[i].y > bbmax.y) bbmax.y = triangle[i].y;
+    }
 }
 
 bool
@@ -250,6 +263,7 @@ Renderer::render()
         }
 
         fillTriangle(p0_proj, p1_proj, p2_proj);
+        fillTriangle2(p0_proj, p1_proj, p2_proj);
     }
 }
 
