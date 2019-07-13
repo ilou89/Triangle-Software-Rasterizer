@@ -14,19 +14,19 @@ static void printUsage(std::string name);
 static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice, bool &xmlSVG);
 
 int main(int argc, char *argv[]) {
-    std::string filename;
+    std::string filename  = "obj/cube.obj";
     std::string imageFile = "lines.bmp";
-    int choice;
-    bool xmlSVG;
+    int choice = 1;
+    bool xmlSVG = false;
 
     if (!parseArguments(argc, argv, filename, choice, xmlSVG)) {
-        return 1;
+        return EXIT_FAILURE;
     }
 
     ModelLoader mdloader;
     if (!mdloader.loadFile(filename)) {
         std::cerr << "unable to execute loadFile" << std::endl;
-        return 1;
+        return EXIT_FAILURE;
     }
 
     Bitmap bitmap(WIDTH, HEIGHT);
@@ -76,26 +76,23 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 static void printUsage(std::string name) {
     std::cerr << "Usage " << name << " [ options ]\n"
               << "options:\n"
               << "\t-h, --help\t\t Show this help message\n"
-              << "\t-s, --svg \t\t Write coordinates into SVG file for offline rendering\n"
+              << "\t-s, --svg \t\t Write coordinates into SVG file for offline rendering through browser\n"
               << "\t-f, --filename  FILE\t Specify the path of the .obj file\n"
               << "\t-b, --bresenham CHOICE\t Specify the drawing algorithm\n"
-              << "\t\t\tChoices are: 1 for simpleBresenham\n"
+              << "\t\t\tChoices are: 1 for simpleBresenham (default)\n"
               << "\t\t\t             2 for integerBresenham\n"
               << "\t\t\t             3 for sliceBresenham\n"
               << std::endl;
 }
 
 static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice, bool &xmlSVG) {
-    filename = "obj/cube.obj";
-    choice = 1;
-    xmlSVG = false;
 
     if (argc == 1) {
         printUsage(argv[0]);

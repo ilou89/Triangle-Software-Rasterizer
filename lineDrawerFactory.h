@@ -11,10 +11,16 @@
 
 class LineDrawerFactory {
 public:
+    enum LineDrawerType{
+        SIMPLE = 1,
+        INTEGER,
+        SLICE
+    };
+
     LineDrawerFactory();
     virtual ~LineDrawerFactory();
 
-    static std::unique_ptr<BaseBresenham> makeLineDrawer(int choice,
+    static std::unique_ptr<BaseBresenham> makeLineDrawer(LineDrawerType type,
                                                          Bitmap &bmp);
 };
 

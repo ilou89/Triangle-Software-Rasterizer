@@ -11,14 +11,14 @@ LineDrawerFactory::~LineDrawerFactory()
 }
 
 std::unique_ptr<BaseBresenham>
-LineDrawerFactory::makeLineDrawer(int choice, Bitmap &bmp)
+LineDrawerFactory::makeLineDrawer(LineDrawerType type, Bitmap &bmp)
 {
-    switch (choice) {
-        case 1:
+    switch (type) {
+        case SIMPLE:
             return std::make_unique<SimpleBresenham>(bmp);
-        case 2:
+        case INTEGER:
             return std::make_unique<IntegerBresenham>(bmp);
-        case 3:
+        case SLICE:
             return std::make_unique<SliceBresenham>(bmp);
         default:
             return std::make_unique<SimpleBresenham>(bmp);

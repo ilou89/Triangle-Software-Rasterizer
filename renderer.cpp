@@ -9,7 +9,8 @@ const Color PURPLE = Color(128, 0, 128, 255);
 Renderer::Renderer(int choice, Bitmap &bitmap, ModelLoader &model)
  : bmp(bitmap), model(model)
 {
-    lineDrawer = LineDrawerFactory::makeLineDrawer(choice, bitmap);
+    LineDrawerFactory::LineDrawerType type = static_cast<LineDrawerFactory::LineDrawerType>(choice);
+    lineDrawer = LineDrawerFactory::makeLineDrawer(type, bitmap);
 }
 
 Renderer::~Renderer()
