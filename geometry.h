@@ -1,6 +1,8 @@
 #ifndef __GEOMETRY_H__
 #define __GEOMETRY_H__
 
+#include <math.h>
+
 template<typename T>
 class Vec2 {
 public:
@@ -46,8 +48,24 @@ public:
         return Vec3<T>(this->x - rhs.x, this->y - rhs.y, this->z - rhs.z);
     }
 
+    T operator*(const Vec3<T> &v) const {
+        return x*v.x + y*v.y + z*v.z;
+    }
+
     Vec3<T> operator*(T value) const {
         return Vec3<T>(this->x * value, this->y * value, this->z * value);
+    }
+
+    Vec3<T> operator^(const Vec3<T> &v) const {
+        return Vec3<T>(y*v.z-z*v.y, z*v.x-x*v.z, x*v.y-y*v.x);
+    }
+
+    float norm () const {
+        return std::sqrt(x*x+y*y+z*z);
+    }
+
+    Vec3<T> &normalize(T l = 1) {
+        *this = (*this) * (l/norm()); return *this;
     }
 
     T x, y, z;

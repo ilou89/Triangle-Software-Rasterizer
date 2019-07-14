@@ -20,7 +20,7 @@ Renderer::~Renderer()
 
 /* Line sweeping method using Bresenham */
 void
-Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
+Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2, float intensity)
 {
     std::vector<unsigned int> p0;
     std::vector<unsigned int> p1;
@@ -36,20 +36,22 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
         std::swap(v1, v2);
     }
 
+    //Color color(rand()%255, rand()%255, rand()%255, 255);
+    Color color(intensity * 255, intensity * 255, intensity * 255, 255);
     /*
      * Get the coordinates of the outline
      * of the triangle
      */
-    lineDrawer->line(v0, v1, PURPLE);
+    lineDrawer->line(v0, v1, color);
     p0 = lineDrawer->getXCoords();
     if (!p0.empty()) {
         p0.pop_back();
     }
 
-    lineDrawer->line(v1, v2, PURPLE);
+    lineDrawer->line(v1, v2, color);
     p1 = lineDrawer->getXCoords();
 
-    lineDrawer->line(v2, v0, RED);
+    lineDrawer->line(v2, v0, color);
     p2 = lineDrawer->getXCoords();
 
     p0.insert(p0.end(), p1.begin(), p1.end());
@@ -59,7 +61,6 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
      * for each height pixel
      */
     int i = 0;
-    Color color(rand()%255, rand()%255, rand()%255, 255);
     for (unsigned int y = v0.y; y < v2.y; y++) {
         Point2D pStart(p2[i], y);
         Point2D pEnd(p0[i], y);
@@ -67,9 +68,9 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
 
         lineDrawer->line(pEnd, pStart, color);
     }
-    lineDrawer->line(v0, v1, PURPLE);
-    lineDrawer->line(v1, v2, PURPLE);
-    lineDrawer->line(v2, v0, RED);
+    //lineDrawer->line(v0, v1, PURPLE);
+    //lineDrawer->line(v1, v2, PURPLE);
+    //lineDrawer->line(v2, v0, RED);
     p2 = lineDrawer->getXCoords();
 }
 
@@ -179,32 +180,33 @@ Renderer::rasterize()
     Point2D v0(10, 70);
     Point2D v1(50, 160);
     Point2D v2(70, 80);
-    fillTriangle(v0, v1, v2);
+    //fillTriangle(v0, v1, v2);
 
     Point2D v3(180, 50);
     Point2D v4(150, 1);
     Point2D v5(70, 180);
-    fillTriangle(v3, v4, v5);
+    //fillTriangle(v3, v4, v5);
 
     Point2D v6(180, 150);
     Point2D v7(120, 160);
     Point2D v8(130, 180);
-    fillTriangle(v6, v7, v8);
+    //fillTriangle(v6, v7, v8);
 
     Point2D v9(300, 300);
     Point2D v11(400, 200);
     Point2D v10(200, 200);
-    fillTriangle(v9, v10, v11);
+    //fillTriangle(v9, v10, v11);
 
     Point2D v12(400, 400);
     Point2D v13(500, 500);
     Point2D v14(300, 500);
-    fillTriangle(v12, v13, v14);
+    //fillTriangle(v12, v13, v14);
 }
 
 void
 Renderer::render()
 {
+    Vec3f light_dir(0,0,-1);
     unsigned int width = bmp.getWidth();
     unsigned int height = bmp.getHeight();
 
@@ -219,6 +221,10 @@ Renderer::render()
         Vec3f v0 = model.getVerticesAt(triangle[0]);
         Vec3f v1 = model.getVerticesAt(triangle[1]);
         Vec3f v2 = model.getVerticesAt(triangle[2]);
+
+        Vec3f n = (v2-v0)^(v1-v0);
+        n.normalize();
+        float intensity = n*light_dir;
 
         /**
          * Normalize coordinates (from [-1,1] -> [0,1])
@@ -264,8 +270,10 @@ Renderer::render()
             p2_proj.y = height - 1;
         }
 
-        fillTriangle(p0_proj, p1_proj, p2_proj);
-        fillTriangle2(p0_proj, p1_proj, p2_proj);
+        if(intensity > 0) {
+            fillTriangle(p0_proj, p1_proj, p2_proj, intensity);
+        }
+        //fillTriangle2(p0_proj, p1_proj, p2_proj);
     }
 }
 

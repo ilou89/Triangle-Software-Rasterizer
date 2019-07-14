@@ -11,7 +11,7 @@ private:
     ModelLoader &model;
     std::unique_ptr<BaseBresenham> lineDrawer;
 
-    void fillTriangle(Point2D v0, Point2D v1, Point2D v2);
+    void fillTriangle(Point2D v0, Point2D v1, Point2D v2, float intensity);
     void fillTriangle2(Point2D v0, Point2D v1, Point2D v2);
 
 public:
