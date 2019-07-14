@@ -59,12 +59,13 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
      * for each height pixel
      */
     int i = 0;
+    Color color(rand()%255, rand()%255, rand()%255, 255);
     for (unsigned int y = v0.y; y < v2.y; y++) {
         Point2D pStart(p2[i], y);
         Point2D pEnd(p0[i], y);
         i++;
 
-        lineDrawer->line(pEnd, pStart, Color(rand()%255, rand()%255, rand()%255, 255));
+        lineDrawer->line(pEnd, pStart, color);
     }
     lineDrawer->line(v0, v1, PURPLE);
     lineDrawer->line(v1, v2, PURPLE);
@@ -72,7 +73,7 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2)
     p2 = lineDrawer->getXCoords();
 }
 
-/* Barycentric method */
+/* Barycentric method under construction */
 void
 Renderer::fillTriangle2(Point2D v0, Point2D v1, Point2D v2)
 {
