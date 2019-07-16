@@ -14,7 +14,7 @@ static void printUsage(std::string name);
 static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice, bool &xmlSVG);
 
 int main(int argc, char *argv[]) {
-    std::string filename  = "obj/cube.obj";
+    std::string filename  = "../obj/cube.obj";
     std::string imageFile = "lines.bmp";
     int choice = 1;
     bool xmlSVG = false;
