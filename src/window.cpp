@@ -13,8 +13,7 @@ Window::~Window()
 int
 Window::CreateWindow(std::string &imageFile)
 {
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
+    if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "Failed to initialize the SDL2 library\n";
         return -1;
     }
@@ -24,24 +23,21 @@ Window::CreateWindow(std::string &imageFile)
                               SDL_WINDOWPOS_CENTERED,
                               800, 600, 0);
 
-    if(!window)
-    {
+    if(!window) {
         std::cout << "Failed to create window\n";
         return -1;
     }
 
     windowSurface = SDL_GetWindowSurface(window);
 
-    if(!windowSurface)
-    {
+    if(!windowSurface) {
         std::cout << "Failed to get the surface from the window\n";
         return -1;
     }
 
     image = SDL_LoadBMP(imageFile.c_str());
 
-    if(!image)
-    {
+    if(!image) {
 	    std::cout << "Failed to load image\n";
 	    std::cout << "SDL2 Error: " << SDL_GetError() << "\n";
 	    return -1;

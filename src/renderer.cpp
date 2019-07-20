@@ -24,21 +24,29 @@ Renderer::fillTriangle(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
 {
     unsigned int width = bmp.getWidth();
     unsigned int height = bmp.getHeight();
-
-    /* Convert to unsigned in order to use bresenham and clip against screen bounds */
-    Point2D p0_raster;
-    p0_raster.x = std::max(0, std::min(static_cast<int>(width - 1), static_cast<int>(std::floor(v0.x))));
-    p0_raster.y = std::max(0, std::min(static_cast<int>(height - 1),static_cast<int>( std::floor(v0.y))));
-    Point2D p1_raster;
-    p1_raster.x = std::max(0, std::min(static_cast<int>(width - 1), static_cast<int>(std::floor(v1.x))));
-    p1_raster.y = std::max(0, std::min(static_cast<int>(height - 1),static_cast<int>( std::floor(v1.y))));
-    Point2D p2_raster;
-    p2_raster.x = std::max(0, std::min(static_cast<int>(width - 1), static_cast<int>(std::floor(v2.x))));
-    p2_raster.y = std::max(0, std::min(static_cast<int>(height - 1),static_cast<int>( std::floor(v2.y))));
-
     std::vector<unsigned int> p0;
     std::vector<unsigned int> p1;
     std::vector<unsigned int> p2;
+
+    /*
+     * Convert to unsigned in order to use bresenham and
+     * clip against screen bounds
+     */
+    Point2D p0_raster;
+    p0_raster.x = std::max(0, std::min(static_cast<int>(width - 1),
+                                       static_cast<int>(std::floor(v0.x))));
+    p0_raster.y = std::max(0, std::min(static_cast<int>(height - 1),
+                                       static_cast<int>(std::floor(v0.y))));
+    Point2D p1_raster;
+    p1_raster.x = std::max(0, std::min(static_cast<int>(width - 1),
+                                       static_cast<int>(std::floor(v1.x))));
+    p1_raster.y = std::max(0, std::min(static_cast<int>(height - 1),
+                                       static_cast<int>(std::floor(v1.y))));
+    Point2D p2_raster;
+    p2_raster.x = std::max(0, std::min(static_cast<int>(width - 1),
+                                       static_cast<int>(std::floor(v2.x))));
+    p2_raster.y = std::max(0, std::min(static_cast<int>(height - 1),
+                                       static_cast<int>(std::floor(v2.y))));
 
     if (p0_raster.y > p1_raster.y) {
         std::swap(p0_raster, p1_raster);
@@ -55,7 +63,7 @@ Renderer::fillTriangle(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
 
     /*
      * Get the coordinates of the outline
-     * of the triangle
+     * of the triangles
      */
     lineDrawer->line(p0_raster, p1_raster, color);
     p0 = lineDrawer->getXCoords();
@@ -83,6 +91,8 @@ Renderer::fillTriangle(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
 
         lineDrawer->line(pEnd, pStart, color);
     }
+
+    /* Drawing the outline of the triangles */
     //lineDrawer->line(p0_raster, p1_raster, PURPLE);
     //lineDrawer->line(p1_raster, p2_raster, PURPLE);
     //lineDrawer->line(p2_raster, p0_raster, RED);
@@ -191,7 +201,7 @@ Renderer::wireframe(bool xmlSVG)
 void
 Renderer::rasterize()
 {
-    float intensity = 0;
+    float intensity = 0.5f;
 
     Vec3f v0(10, 70, 0);
     Vec3f v1(50, 160, 0);
@@ -222,6 +232,7 @@ Renderer::rasterize()
 void
 Renderer::render()
 {
+    float intensity;
     Vec3f light_dir(0,0,-1);
     unsigned int width = bmp.getWidth();
     unsigned int height = bmp.getHeight();
@@ -238,9 +249,9 @@ Renderer::render()
         Vec3f v1 = model.getVerticesAt(triangle[1]);
         Vec3f v2 = model.getVerticesAt(triangle[2]);
 
-        Vec3f n = (v2-v0)^(v1-v0);
+        Vec3f n = (v2 - v0) ^ (v1 - v0);
         n.normalize();
-        float intensity = n*light_dir;
+        intensity = n*light_dir;
 
         /**
          * Assume that the vertices read from .obj fle
