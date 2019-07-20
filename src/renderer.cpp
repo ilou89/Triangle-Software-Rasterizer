@@ -20,38 +20,53 @@ Renderer::~Renderer()
 
 /* Line sweeping method using Bresenham */
 void
-Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2, float intensity)
+Renderer::fillTriangle(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
 {
+    unsigned int width = bmp.getWidth();
+    unsigned int height = bmp.getHeight();
+
+    /* Convert to unsigned in order to use bresenham and clip against screen bounds */
+    Point2D p0_raster;
+    p0_raster.x = std::max(0, std::min(static_cast<int>(width - 1), static_cast<int>(std::floor(v0.x))));
+    p0_raster.y = std::max(0, std::min(static_cast<int>(height - 1),static_cast<int>( std::floor(v0.y))));
+    Point2D p1_raster;
+    p1_raster.x = std::max(0, std::min(static_cast<int>(width - 1), static_cast<int>(std::floor(v1.x))));
+    p1_raster.y = std::max(0, std::min(static_cast<int>(height - 1),static_cast<int>( std::floor(v1.y))));
+    Point2D p2_raster;
+    p2_raster.x = std::max(0, std::min(static_cast<int>(width - 1), static_cast<int>(std::floor(v2.x))));
+    p2_raster.y = std::max(0, std::min(static_cast<int>(height - 1),static_cast<int>( std::floor(v2.y))));
+
     std::vector<unsigned int> p0;
     std::vector<unsigned int> p1;
     std::vector<unsigned int> p2;
 
-    if (v0.y > v1.y) {
-        std::swap(v0, v1);
+    if (p0_raster.y > p1_raster.y) {
+        std::swap(p0_raster, p1_raster);
     }
-    if (v0.y > v2.y) {
-        std::swap(v0, v2);
+    if (p0_raster.y > p2_raster.y) {
+        std::swap(p0_raster, p2_raster);
     }
-    if (v1.y > v2.y) {
-        std::swap(v1, v2);
+    if (p1_raster.y > p2_raster.y) {
+        std::swap(p1_raster, p2_raster);
     }
 
     //Color color(rand()%255, rand()%255, rand()%255, 255);
     Color color(intensity * 255, intensity * 255, intensity * 255, 255);
+
     /*
      * Get the coordinates of the outline
      * of the triangle
      */
-    lineDrawer->line(v0, v1, color);
+    lineDrawer->line(p0_raster, p1_raster, color);
     p0 = lineDrawer->getXCoords();
     if (!p0.empty()) {
         p0.pop_back();
     }
 
-    lineDrawer->line(v1, v2, color);
+    lineDrawer->line(p1_raster, p2_raster, color);
     p1 = lineDrawer->getXCoords();
 
-    lineDrawer->line(v2, v0, color);
+    lineDrawer->line(p2_raster, p0_raster, color);
     p2 = lineDrawer->getXCoords();
 
     p0.insert(p0.end(), p1.begin(), p1.end());
@@ -61,37 +76,36 @@ Renderer::fillTriangle(Point2D v0, Point2D v1, Point2D v2, float intensity)
      * for each height pixel
      */
     int i = 0;
-    for (unsigned int y = v0.y; y < v2.y; y++) {
+    for (unsigned int y = p0_raster.y; y < p2_raster.y; y++) {
         Point2D pStart(p2[i], y);
         Point2D pEnd(p0[i], y);
         i++;
 
         lineDrawer->line(pEnd, pStart, color);
     }
-    //lineDrawer->line(v0, v1, PURPLE);
-    //lineDrawer->line(v1, v2, PURPLE);
-    //lineDrawer->line(v2, v0, RED);
-    p2 = lineDrawer->getXCoords();
+    //lineDrawer->line(p0_raster, p1_raster, PURPLE);
+    //lineDrawer->line(p1_raster, p2_raster, PURPLE);
+    //lineDrawer->line(p2_raster, p0_raster, RED);
 }
 
 /* Barycentric method under construction */
 void
-Renderer::fillTriangle2(Point2D v0, Point2D v1, Point2D v2)
+Renderer::fillTriangle2(Vec3f v0, Vec3f v1, Vec3f v2)
 {
-    std::vector<Point2D> triangle;
-    triangle.push_back(v0);
-    triangle.push_back(v1);
-    triangle.push_back(v2);
+    //std::vector<Point2D> triangle;
+    //triangle.push_back(v0);
+    //triangle.push_back(v1);
+    //triangle.push_back(v2);
 
-    Point2D bbmax(0, 0);
-    Point2D bbmin(bmp.getWidth() - 1, bmp.getHeight() - 1);
+    //Point2D bbmax(0, 0);
+    //Point2D bbmin(bmp.getWidth() - 1, bmp.getHeight() - 1);
 
-    for (int i = 0; i < 3; ++i) {
-        if (triangle[i].x < bbmin.x) bbmin.x = triangle[i].x;
-        if (triangle[i].y < bbmin.y) bbmin.y = triangle[i].y;
-        if (triangle[i].x > bbmax.x) bbmax.x = triangle[i].x;
-        if (triangle[i].y > bbmax.y) bbmax.y = triangle[i].y;
-    }
+    //for (int i = 0; i < 3; ++i) {
+    //    if (triangle[i].x < bbmin.x) bbmin.x = triangle[i].x;
+    //    if (triangle[i].y < bbmin.y) bbmin.y = triangle[i].y;
+    //    if (triangle[i].x > bbmax.x) bbmax.x = triangle[i].x;
+    //    if (triangle[i].y > bbmax.y) bbmax.y = triangle[i].y;
+    //}
 }
 
 bool
@@ -177,30 +191,32 @@ Renderer::wireframe(bool xmlSVG)
 void
 Renderer::rasterize()
 {
-    Point2D v0(10, 70);
-    Point2D v1(50, 160);
-    Point2D v2(70, 80);
-    //fillTriangle(v0, v1, v2);
+    float intensity = 0;
 
-    Point2D v3(180, 50);
-    Point2D v4(150, 1);
-    Point2D v5(70, 180);
-    //fillTriangle(v3, v4, v5);
+    Vec3f v0(10, 70, 0);
+    Vec3f v1(50, 160, 0);
+    Vec3f v2(70, 80, 0);
+    fillTriangle(v0, v1, v2, intensity);
 
-    Point2D v6(180, 150);
-    Point2D v7(120, 160);
-    Point2D v8(130, 180);
-    //fillTriangle(v6, v7, v8);
+    Vec3f v3(180, 50, 0);
+    Vec3f v4(150, 1, 0);
+    Vec3f v5(70, 180, 0);
+    fillTriangle(v3, v4, v5, intensity);
 
-    Point2D v9(300, 300);
-    Point2D v11(400, 200);
-    Point2D v10(200, 200);
-    //fillTriangle(v9, v10, v11);
+    Vec3f v6(180, 150, 0);
+    Vec3f v7(120, 160, 0);
+    Vec3f v8(130, 180, 0);
+    fillTriangle(v6, v7, v8, intensity);
 
-    Point2D v12(400, 400);
-    Point2D v13(500, 500);
-    Point2D v14(300, 500);
-    //fillTriangle(v12, v13, v14);
+    Vec3f v9(300, 300, 0);
+    Vec3f v11(400, 200, 0);
+    Vec3f v10(200, 200, 0);
+    fillTriangle(v9, v10, v11, intensity);
+
+    Vec3f v12(400, 400, 0);
+    Vec3f v13(500, 500, 0);
+    Vec3f v14(300, 500, 0);
+    fillTriangle(v12, v13, v14, intensity);
 }
 
 void
@@ -227,53 +243,21 @@ Renderer::render()
         float intensity = n*light_dir;
 
         /**
-         * Normalize coordinates (from [-1,1] -> [0,1])
-         * Normalized Device Coordinates
+         * Assume that the vertices read from .obj fle
+         * are already in NDC space ([-1,1]).
+         * Convert them to [0,1] and then in raster space
          */
-        float x0_proj_remap = (v0.x + 1.0f) / 2;
-        float y0_proj_remap = (v0.y + 1.0f) / 2;
-        float x1_proj_remap = (v1.x + 1.0f) / 2;
-        float y1_proj_remap = (v1.y + 1.0f) / 2;
-        float x2_proj_remap = (v2.x + 1.0f) / 2;
-        float y2_proj_remap = (v2.y + 1.0f) / 2;
-
-        /**
-         * Express normalized coordinates in terms of pixels
-         * Raster Space
-         */
-        Point2D p0_proj;
-        p0_proj.x  = static_cast<unsigned int>(x0_proj_remap * width);
-        p0_proj.y = static_cast<unsigned int>(y0_proj_remap * height);
-        Point2D p1_proj;
-        p1_proj.x = static_cast<unsigned int>(x1_proj_remap * width);
-        p1_proj.y = static_cast<unsigned int>(y1_proj_remap * height);
-        Point2D p2_proj;
-        p2_proj.x = static_cast<unsigned int>(x2_proj_remap * width);
-        p2_proj.y = static_cast<unsigned int>(y2_proj_remap * height);
-
-        if (p0_proj.x >= width) {
-            p0_proj.x = width - 1;
-        }
-        if (p1_proj.x >= width) {
-            p1_proj.x = width - 1;
-        }
-        if (p2_proj.x >= width) {
-            p2_proj.x = width - 1;
-        }
-        if (p0_proj.y >= height) {
-            p0_proj.y = height - 1;
-        }
-        if (p1_proj.y >= height) {
-            p1_proj.y = height - 1;
-        }
-        if (p2_proj.y >= height) {
-            p2_proj.y = height - 1;
-        }
+        v0.x = (v0.x + 1.0f) * width / 2.0f;
+        v0.y = (v0.y + 1.0f) * height / 2.0f;
+        v1.x = (v1.x + 1.0f) * width / 2.0f;
+        v1.y = (v1.y + 1.0f) * height / 2.0f;
+        v2.x = (v2.x + 1.0f) * width/ 2.0f;
+        v2.y = (v2.y + 1.0f) * height / 2.0f;
 
         if(intensity > 0) {
-            fillTriangle(p0_proj, p1_proj, p2_proj, intensity);
+            fillTriangle(v0, v1, v2, intensity);
         }
-        //fillTriangle2(p0_proj, p1_proj, p2_proj);
+        //fillTriangle2(v0, v1, v2);
     }
 }
 
