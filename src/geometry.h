@@ -7,7 +7,7 @@ template<typename T>
 class Vec2 {
 public:
     Vec2()
-     : x(0), y(0) { }
+     : x(T(0)), y(T(0)) { }
 
     Vec2(T x, T y)
      : x(x), y(y) { }
@@ -18,6 +18,11 @@ public:
 
     Vec2<T> operator-(const Vec2<T> &rhs) const {
         return Vec2<T>(this->x - rhs.x, this->y - rhs.y);
+    }
+
+    T operator*(const Vec2<T> &rhs) const {
+        return this->x * rhs.x +
+               this->y * rhs.y;
     }
 
     Vec2<T> operator*(T value) const {
@@ -35,7 +40,7 @@ template<typename T>
 class Vec3 {
 public:
     Vec3()
-     : x(0), y(0), z(0) { }
+     : x(T(0)), y(T(0)), z(T(0)) { }
 
     Vec3(T x, T y, T z)
      : x(x), y(y), z(z) { }
@@ -48,24 +53,37 @@ public:
         return Vec3<T>(this->x - rhs.x, this->y - rhs.y, this->z - rhs.z);
     }
 
-    T operator*(const Vec3<T> &v) const {
-        return x*v.x + y*v.y + z*v.z;
+    T operator*(const Vec3<T> &rhs) const {
+        return this->x * rhs.x +
+               this->y * rhs.y +
+               this->z * rhs.z;
     }
 
     Vec3<T> operator*(T value) const {
         return Vec3<T>(this->x * value, this->y * value, this->z * value);
     }
 
-    Vec3<T> operator^(const Vec3<T> &v) const {
-        return Vec3<T>(y*v.z-z*v.y, z*v.x-x*v.z, x*v.y-y*v.x);
+    Vec3<T> operator^(const Vec3<T> &rhs) const {
+        return Vec3<T>(this->y * rhs.z - this->z * rhs.y,
+                       this->z * rhs.x - this->x * rhs.z,
+                       this->x * rhs.y - this->y * rhs.x);
     }
 
-    float norm () const {
-        return std::sqrt(x*x+y*y+z*z);
+    T norm() const {
+        return std::sqrt(this->x * this->x +
+                         this->y * this->y +
+                         this->z * this->z);
     }
 
     Vec3<T> &normalize(T l = 1) {
-        *this = (*this) * (l/norm()); return *this;
+        T len = norm();
+        if (len > 0) {
+            T reciproLen = 1 / len;
+            this->x = x * reciproLen;
+            this->y = y * reciproLen;
+            this->z = z * reciproLen;
+        }
+        return *this;
     }
 
     T x, y, z;
