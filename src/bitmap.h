@@ -71,7 +71,8 @@ class Bitmap {
 private:
     unsigned int width;
     unsigned int height;
-    std::unique_ptr<uint8_t[]> data;
+    std::unique_ptr<uint8_t[]> frameBuffer;
+    std::unique_ptr<float[]> zBuffer;
 
     void fillHeaders(FileHeader& fileHeader, InfoHeader& infoHeader);
 
@@ -85,10 +86,12 @@ public:
     Bitmap& operator=(const Bitmap& rhs);
     ~Bitmap();
 
-    bool setPixel(Point2D p, const Color& color);
+    bool setPixel(const Point2D& p, const Color& color);
+    bool setDepth(const Point2D& p, float z);
     bool write(const char* filename);
     unsigned int getWidth() const;
     unsigned int getHeight() const;
+    bool zBufferTest(const Point2D& p, float z) const;
 };
 
 #endif //__BMPIMAGE_H__

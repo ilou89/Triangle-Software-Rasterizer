@@ -104,51 +104,52 @@ Renderer::fillTriangle2(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
 {
     unsigned int width = bmp.getWidth();
     unsigned int height = bmp.getHeight();
-    Point2D bbmax(0, 0);
-    Point2D bbmin(width - 1, height - 1);
+    float xmin, ymin, xmax, ymax;
 
-    /*
-     * Convert to unsigned in order to use bresenham and
-     * clip against screen bounds
-     */
-    Point2D p0_raster;
-    p0_raster.x = std::max(0, std::min(static_cast<int>(width - 1),
-                                       static_cast<int>(std::floor(v0.x))));
-    p0_raster.y = std::max(0, std::min(static_cast<int>(height - 1),
-                                       static_cast<int>(std::floor(v0.y))));
-    Point2D p1_raster;
-    p1_raster.x = std::max(0, std::min(static_cast<int>(width - 1),
-                                       static_cast<int>(std::floor(v1.x))));
-    p1_raster.y = std::max(0, std::min(static_cast<int>(height - 1),
-                                       static_cast<int>(std::floor(v1.y))));
-    Point2D p2_raster;
-    p2_raster.x = std::max(0, std::min(static_cast<int>(width - 1),
-                                       static_cast<int>(std::floor(v2.x))));
-    p2_raster.y = std::max(0, std::min(static_cast<int>(height - 1),
-                                       static_cast<int>(std::floor(v2.y))));
+    xmin = v0.x;
+    ymin = v0.y;
+    if(v1.x < xmin) xmin = v1.x;
+    if(v1.y < ymin) ymin = v1.y;
+    if(v2.x < xmin) xmin = v2.x;
+    if(v2.y < ymin) ymin = v2.y;
 
-    std::vector<Point2D> triangle;
-    triangle.push_back(p0_raster);
-    triangle.push_back(p1_raster);
-    triangle.push_back(p2_raster);
+    xmax = v0.x;
+    ymax = v0.y;
+    if(v1.x > xmax) xmax = v1.x;
+    if(v1.y > ymax) ymax = v1.y;
+    if(v2.x > xmax) xmax = v2.x;
+    if(v2.y > ymax) ymax = v2.y;
 
-    for (int i = 0; i < 3; ++i) {
-        if (triangle[i].x < bbmin.x) bbmin.x = triangle[i].x;
-        if (triangle[i].y < bbmin.y) bbmin.y = triangle[i].y;
-        if (triangle[i].x > bbmax.x) bbmax.x = triangle[i].x;
-        if (triangle[i].y > bbmax.y) bbmax.y = triangle[i].y;
-    }
+    uint32_t x0 = std::max(int32_t(0), (int32_t)(std::floor(xmin)));
+    uint32_t x1 = std::min(int32_t(width) - 1, (int32_t)(std::floor(xmax)));
+    uint32_t y0 = std::max(int32_t(0), (int32_t)(std::floor(ymin)));
+    uint32_t y1 = std::min(int32_t(height) - 1, (int32_t)(std::floor(ymax)));
+
+    float area = edgeFunction(v0, v1, v2);
+    v0.z = 1 / v0.z;
+    v1.z = 1 / v1.z;
+    v2.z = 1 / v2.z;
 
     Color color(intensity * 255, intensity * 255, intensity * 255, 255);
 	Point2D p;
-    for(p.y = bbmin.y; p.y <= bbmax.y; ++p.y) {
-        for(p.x = bbmin.x; p.x <= bbmax.x; ++p.x) {
-            int w0 = edgeFunction(p1_raster, p2_raster, p);
-            int w1 = edgeFunction(p2_raster, p0_raster, p);
-            int w2 = edgeFunction(p0_raster, p1_raster, p);
+    for(p.y = y0; p.y <= y1; ++p.y) {
+        for(p.x = x0; p.x <= x1; ++p.x) {
+            Vec3f pixel(p.x + 0.5, p.y +0.5, 0);
+            float w0 = edgeFunction(v1, v2, pixel);
+            float w1 = edgeFunction(v2, v0, pixel);
+            float w2 = edgeFunction(v0, v1, pixel);
 
             if(w0 >= 0 && w1>= 0 && w2 >= 0) {
-                bmp.setPixel(p, color);
+                w0 /= area;
+                w1 /= area;
+                w2 /= area;
+                float reciprocZ = v0.z * w0 + v1.z * w1 + v2.z * w2;
+                float z = 1 / reciprocZ;
+                bool test = bmp.zBufferTest(p, z);
+                if (test) {
+                    bmp.setDepth(p, z);
+                    bmp.setPixel(p, color);
+                }
             }
         }
     }
@@ -242,27 +243,27 @@ Renderer::rasterize()
     Vec3f v0(10, 70, 0);
     Vec3f v1(50, 160, 0);
     Vec3f v2(70, 80, 0);
-    fillTriangle(v0, v1, v2, intensity);
+    fillTriangle2(v2, v1, v0, intensity);
 
     Vec3f v3(180, 50, 0);
     Vec3f v4(150, 1, 0);
     Vec3f v5(70, 180, 0);
-    fillTriangle(v3, v4, v5, intensity);
+    fillTriangle2(v5, v4, v3, intensity);
 
     Vec3f v6(180, 150, 0);
     Vec3f v7(120, 160, 0);
     Vec3f v8(130, 180, 0);
-    fillTriangle(v6, v7, v8, intensity);
+    fillTriangle2(v8, v7, v6, intensity);
 
-    Vec3f v9(300, 300, 0);
+    Vec3f v9(200, 200, 0);
+    Vec3f v10(300, 300, 0);
     Vec3f v11(400, 200, 0);
-    Vec3f v10(200, 200, 0);
-    fillTriangle(v9, v10, v11, intensity);
+    fillTriangle2(v11, v10, v9, intensity);
 
-    Vec3f v12(400, 400, 0);
+    Vec3f v12(300, 500, 0);
     Vec3f v13(500, 500, 0);
-    Vec3f v14(300, 500, 0);
-    fillTriangle(v12, v13, v14, intensity);
+    Vec3f v14(400, 400, 0);
+    fillTriangle2(v14, v13, v12, intensity);
 }
 
 void
@@ -301,17 +302,18 @@ Renderer::render()
         v2.x = (v2.x + 1.0f) * width/ 2.0f;
         v2.y = (v2.y + 1.0f) * height / 2.0f;
 
-        if(intensity > 0) {
-            fillTriangle(v0, v1, v2, intensity);
-        }
         //if(intensity > 0) {
-        //    fillTriangle2(v0, v1, v2, intensity);
+        //    fillTriangle(v0, v1, v2, intensity);
         //}
+        if(intensity > 0) {
+            fillTriangle2(v0, v1, v2, intensity);
+        }
     }
 }
 
-int
-Renderer::edgeFunction(Point2D &v0, Point2D &v1, Point2D &v2)
+float
+Renderer::edgeFunction(Vec3f &v0, Vec3f &v1, Vec3f &v2)
 {
-	return (v1.x - v0.x) * (v2.y - v0.y) - (v1.y - v0.y) * (v2.x - v0.x);
+    return (v1.x - v0.x) * (v2.y - v0.y) - (v1.y - v0.y) * (v2.x - v0.x);
 }
+

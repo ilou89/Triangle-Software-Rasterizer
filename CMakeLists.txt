@@ -6,7 +6,7 @@ set (CMAKE_VERBOSE_MAKEFILE 1)
 set(NAME Drawlines)
 project(${NAME})
 
-# Adds -D define flags to the compilation of source files
+#add -Wconversion
 add_definitions(-Wall -std=c++14 -Wextra -Winline -Wreturn-type -Wuninitialized -Winit-self -Werror -Wno-unused-parameter -Wno-unused-function)
 
 # Bring the shared libraries into the project (for the linker and loader)

@@ -1,36 +1,51 @@
 #include "bitmap.h"
+#include <limits>
 
 Bitmap::Bitmap(unsigned int width, unsigned int height)
  : width(width),
    height(height),
-   data(nullptr)
+   frameBuffer(nullptr),
+   zBuffer(nullptr)
 {
    unsigned long bytes = RGB * width * height;
-   data = std::make_unique<uint8_t[]>(bytes);
+   frameBuffer = std::make_unique<uint8_t[]>(bytes);
+   zBuffer = std::make_unique<float[]>(width * height);
+   float *raw_data = zBuffer.get();
+   for(uint32_t i = 0; i < width * height; ++i) {
+       raw_data[i] = std::numeric_limits<float>::lowest();
+   }
 }
 
 Bitmap::Bitmap(const Bitmap& rhs)
  : width(rhs.width),
    height(rhs.height),
-   data(nullptr)
+   frameBuffer(nullptr),
+   zBuffer(nullptr)
 {
    unsigned long bytes = RGB * width * height;
-   data = std::make_unique<uint8_t[]>(bytes);
-   memcpy(data.get(), rhs.data.get(), bytes);
+   frameBuffer = std::make_unique<uint8_t[]>(bytes);
+   memcpy(frameBuffer.get(), rhs.frameBuffer.get(), bytes);
+   zBuffer = std::make_unique<float[]>(width * height);
+   memcpy(zBuffer.get(), rhs.zBuffer.get(), width * height);
 }
 
 Bitmap&
 Bitmap::operator=(const Bitmap& rhs)
 {
     if(this != &rhs) {
-        if(data) {
-            data.reset();
+        if(frameBuffer) {
+            frameBuffer.reset();
+        }
+        if(zBuffer) {
+            zBuffer.reset();
         }
         width = rhs.width;
         height = rhs.height;
         unsigned long bytes = RGB * width * height;
-        data = std::make_unique<uint8_t[]>(bytes);
-        memcpy(data.get(), rhs.data.get(), bytes);
+        frameBuffer = std::make_unique<uint8_t[]>(bytes);
+        memcpy(frameBuffer.get(), rhs.frameBuffer.get(), bytes);
+        zBuffer = std::make_unique<float[]>(width * height);
+        memcpy(zBuffer.get(), rhs.zBuffer.get(), width * height);
     }
 
     return *this;
@@ -42,9 +57,9 @@ Bitmap::~Bitmap()
 }
 
 bool
-Bitmap::setPixel(Point2D p, const Color& color)
+Bitmap::setPixel(const Point2D& p, const Color& color)
 {
-    uint8_t *raw_data = data.get();
+    uint8_t *raw_data = frameBuffer.get();
     memcpy(raw_data + (p.x + p.y * width) * RGB, color.raw, RGB);
 
     return true;
@@ -66,7 +81,7 @@ Bitmap::write(const char* filename)
 
     file.write(reinterpret_cast<char *>(&fileHeader), sizeof(fileHeader));
     file.write(reinterpret_cast<char *>(&infoHeader), sizeof(infoHeader));
-    file.write(reinterpret_cast<char *>(data.get()), width * height * RGB);
+    file.write(reinterpret_cast<char *>(frameBuffer.get()), width * height * RGB);
 
     file.close();
 
@@ -92,5 +107,25 @@ unsigned int
 Bitmap::getHeight() const
 {
     return this->height;
+}
+
+bool
+Bitmap::zBufferTest(const Point2D& p, float z) const
+{
+    float *raw_data = zBuffer.get();
+    if(z > raw_data[p.x + p.y * width]) {
+        return true;
+    }
+
+    return false;
+}
+
+bool
+Bitmap::setDepth(const Point2D& p, float z)
+{
+    float *raw_data = zBuffer.get();
+    memcpy(raw_data + (p.x + p.y * width), &z, 4);
+
+    return true;
 }
 
