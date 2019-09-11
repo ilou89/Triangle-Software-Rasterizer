@@ -10,6 +10,7 @@ static const unsigned int WIDTH = 800;
 static const unsigned int HEIGHT = 600;
 static bool quit = false;
 
+static void BlitWindow(std::string &imageFile);
 static void printUsage(std::string name);
 static bool parseArguments(int argc, char *argv[], std::string &filename, int &choice, bool &xmlSVG);
 
@@ -35,11 +36,14 @@ int main(int argc, char *argv[]) {
     auto start = std::chrono::system_clock::now();
 
     /* Loop for benchmarking reasons */
-    for (uint32_t i = 0; i < 100; i++) {
+    for (uint32_t i = 0; i < 1; i++) {
         renderer.wireframe(xmlSVG);
     }
 
+    /* Rasterize random triangles for testing reasons */
     renderer.rasterize();
+
+    /* The main function that produces the rendered image */
     renderer.render();
 
     auto end = std::chrono::system_clock::now();
@@ -49,32 +53,8 @@ int main(int argc, char *argv[]) {
 
     bitmap.write("lines.bmp");
 
-    Window sdlWindow;
-    sdlWindow.CreateWindow(imageFile);
-
-    while(!quit)
-    {
-	    SDL_Event event;
-	    while(SDL_PollEvent(&event) > 0)
-	    {
-	        switch(event.type)
-            {
-		        case SDL_QUIT:
-		        {
-		            quit = true;
-		        } break;
-		        case SDL_KEYDOWN:
-		        {
-		            if (event.key.keysym.sym == SDLK_ESCAPE)
-		            {
-                        quit = true;
-		            }
-                } break;
-	        }
-
-            sdlWindow.BlitWindow();
-        }
-    }
+    /* Blit the rendered image into an SDL created window */
+    BlitWindow(imageFile);
 
     return EXIT_SUCCESS;
 }
@@ -128,5 +108,35 @@ static bool parseArguments(int argc, char *argv[], std::string &filename, int &c
     }
 
     return true;
+}
+
+static void BlitWindow(std::string &imageFile)
+{
+    Window sdlWindow;
+    sdlWindow.CreateWindow(imageFile);
+
+    while(!quit)
+    {
+	    SDL_Event event;
+	    while(SDL_PollEvent(&event) > 0)
+	    {
+	        switch(event.type)
+            {
+		        case SDL_QUIT:
+		        {
+		            quit = true;
+		        } break;
+		        case SDL_KEYDOWN:
+		        {
+		            if (event.key.keysym.sym == SDLK_ESCAPE)
+		            {
+                        quit = true;
+		            }
+                } break;
+	        }
+
+            sdlWindow.BlitWindow();
+        }
+    }
 }
 

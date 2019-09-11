@@ -18,9 +18,12 @@ Renderer::~Renderer()
 
 }
 
-/* Line sweeping rasterization method using Bresenham */
+/*
+ * Line sweeping rasterization method using Bresenham
+ * Does not support depth testing
+ */
 void
-Renderer::fillTriangle(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
+Renderer::LineSweep(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
 {
     unsigned int width = bmp.getWidth();
     unsigned int height = bmp.getHeight();
@@ -100,7 +103,7 @@ Renderer::fillTriangle(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
 
 /* Barycentric rasterization method */
 void
-Renderer::fillTriangle2(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
+Renderer::Barycentric(Vec3f v0, Vec3f v1, Vec3f v2, float intensity)
 {
     unsigned int width = bmp.getWidth();
     unsigned int height = bmp.getHeight();
@@ -243,27 +246,27 @@ Renderer::rasterize()
     Vec3f v0(10, 70, 0);
     Vec3f v1(50, 160, 0);
     Vec3f v2(70, 80, 0);
-    fillTriangle2(v2, v1, v0, intensity);
+    Barycentric(v2, v1, v0, intensity);
 
     Vec3f v3(180, 50, 0);
     Vec3f v4(150, 1, 0);
     Vec3f v5(70, 180, 0);
-    fillTriangle2(v5, v4, v3, intensity);
+    Barycentric(v5, v4, v3, intensity);
 
     Vec3f v6(180, 150, 0);
     Vec3f v7(120, 160, 0);
     Vec3f v8(130, 180, 0);
-    fillTriangle2(v8, v7, v6, intensity);
+    Barycentric(v8, v7, v6, intensity);
 
     Vec3f v9(200, 200, 0);
     Vec3f v10(300, 300, 0);
     Vec3f v11(400, 200, 0);
-    fillTriangle2(v11, v10, v9, intensity);
+    Barycentric(v11, v10, v9, intensity);
 
     Vec3f v12(300, 500, 0);
     Vec3f v13(500, 500, 0);
     Vec3f v14(400, 400, 0);
-    fillTriangle2(v14, v13, v12, intensity);
+    Barycentric(v14, v13, v12, intensity);
 }
 
 void
@@ -288,7 +291,7 @@ Renderer::render()
 
         Vec3f n = (v2 - v0) ^ (v1 - v0);
         n.normalize();
-        intensity = n*light_dir;
+        intensity = n * light_dir;
 
         /**
          * Assume that the vertices read from .obj fle
@@ -302,11 +305,16 @@ Renderer::render()
         v2.x = (v2.x + 1.0f) * width/ 2.0f;
         v2.y = (v2.y + 1.0f) * height / 2.0f;
 
+        /**
+         * Choose between linesweeping or barycentric
+         * rasterization
+         */
         //if(intensity > 0) {
-        //    fillTriangle(v0, v1, v2, intensity);
+        //    LineSweep(v0, v1, v2, intensity);
         //}
+
         if(intensity > 0) {
-            fillTriangle2(v0, v1, v2, intensity);
+            Barycentric(v0, v1, v2, intensity);
         }
     }
 }

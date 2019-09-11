@@ -12,8 +12,8 @@ private:
     std::unique_ptr<BaseBresenham> lineDrawer;
 
     float edgeFunction(Vec3f &v0, Vec3f &v1, Vec3f &v2);
-    void fillTriangle(Vec3f v0, Vec3f v1, Vec3f v2, float intensity);
-    void fillTriangle2(Vec3f v0, Vec3f v1, Vec3f v2, float intensity);
+    void LineSweep(Vec3f v0, Vec3f v1, Vec3f v2, float intensity);
+    void Barycentric(Vec3f v0, Vec3f v1, Vec3f v2, float intensity);
 
 public:
     Renderer(int choice, Bitmap &bitmap, ModelLoader &model);
