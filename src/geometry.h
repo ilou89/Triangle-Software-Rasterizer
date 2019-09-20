@@ -1,7 +1,7 @@
 #ifndef __GEOMETRY_H__
 #define __GEOMETRY_H__
 
-#include <math.h>
+#include <cmath>
 
 template<typename T>
 class Vec2 {
