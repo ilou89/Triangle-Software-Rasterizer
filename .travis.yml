@@ -1,0 +1,9 @@
+language: cpp
+sudo: required
+dist: xenial
+compiler:
+  - gcc
+os:
+  - linux
+
+script: ./set_env.sh
