@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/ilou89/Triangle-Software-Rasterizer.svg?branch=master)](https://travis-ci.com/ilou89/Triangle-Software-Rasterizer)
+
 # Triangle-Software-Rasterizer
 This repo is an attempt to create a triangle software rasterizer.
 Creating a rasterizer is usually the recommended way for beginners to be introduced to concepts of computer graphics instead of figuring them out using complex modern graphics APIs like Vulkan and OpenGL.
