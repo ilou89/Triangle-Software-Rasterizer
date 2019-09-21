@@ -6,4 +6,4 @@ compiler:
 os:
   - linux
 
-script: ./set_env.sh
+script: ./build.sh
