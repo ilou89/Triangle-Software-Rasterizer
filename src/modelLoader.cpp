@@ -99,3 +99,8 @@ ModelLoader::getVerticesAt(int index)
     return vertices[index];
 }
 
+const std::vector<std::vector<int>>&
+ModelLoader::getIndices()
+{
+    return indices;
+}

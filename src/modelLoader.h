@@ -25,6 +25,8 @@ public:
     int indicesSize();
     std::vector<int> getIndicesAt(int index);
     Vec3f getVerticesAt(int index);
+
+    const std::vector<std::vector<int>>& getIndices();
 };
 
 #endif //__MODELLOADER_H__

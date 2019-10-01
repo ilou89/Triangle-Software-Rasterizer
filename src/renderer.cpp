@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "renderer.h"
 
 const Color RED    = Color(255, 0, 0, 255);
@@ -317,6 +318,10 @@ Renderer::render()
             Barycentric(v0, v1, v2, intensity);
         }
     }
+
+    // std::for_each(model.getIndices().begin(), model.getIndices().end(), [](const std::vector<int> triangle) {
+    //     std::cout<< "Lambda expression" << std::endl;
+    // });
 }
 
 float
