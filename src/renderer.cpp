@@ -278,50 +278,38 @@ Renderer::render()
     unsigned int width = bmp.getWidth();
     unsigned int height = bmp.getHeight();
 
-    for (int i = 0; i < model.indicesSize(); ++i) {
-        std::vector<int> triangle = model.getIndicesAt(i);
-
-        /**
-         * Assume that the vertices read from .obj file
-         * are already projected and are in screen space,
-         * otherwise perspective division would be needed
-         */
-        Vec3f v0 = model.getVerticesAt(triangle[0]);
-        Vec3f v1 = model.getVerticesAt(triangle[1]);
-        Vec3f v2 = model.getVerticesAt(triangle[2]);
+    std::for_each(model.getIndices().begin(), model.getIndices().end(), [this, width, height, light_dir, &intensity](const std::vector<int> triangle) {
+        //Alternative:  for (int i = 0; i < model.indicesSize(); ++i)
+        Vec3f v0 = this->model.getVerticesAt(triangle[0]);
+        Vec3f v1 = this->model.getVerticesAt(triangle[1]);
+        Vec3f v2 = this->model.getVerticesAt(triangle[2]);
 
         Vec3f n = (v2 - v0) ^ (v1 - v0);
         n.normalize();
         intensity = n * light_dir;
 
-        /**
-         * Assume that the vertices read from .obj fle
-         * are already in NDC space ([-1,1]).
-         * Convert them to [0,1] and then in raster space
-         */
-        v0.x = (v0.x + 1.0f) * width / 2.0f;
+        //Assume that the vertices read from .obj fle
+        //are already in NDC space ([-1,1]).
+        //Convert them to [0,1] and then in raster space
+
+        v0.x = (v0.x + 1.0f) * width  / 2.0f;
         v0.y = (v0.y + 1.0f) * height / 2.0f;
-        v1.x = (v1.x + 1.0f) * width / 2.0f;
+        v1.x = (v1.x + 1.0f) * width  / 2.0f;
         v1.y = (v1.y + 1.0f) * height / 2.0f;
-        v2.x = (v2.x + 1.0f) * width/ 2.0f;
+        v2.x = (v2.x + 1.0f) * width  / 2.0f;
         v2.y = (v2.y + 1.0f) * height / 2.0f;
 
-        /**
-         * Choose between linesweeping or barycentric
-         * rasterization
-         */
-        //if(intensity > 0) {
+        //Choose between linesweeping or barycentric
+        //rasterization
+
+        // if(intensity > 0) {
         //    LineSweep(v0, v1, v2, intensity);
-        //}
+        // }
 
         if(intensity > 0) {
             Barycentric(v0, v1, v2, intensity);
         }
-    }
-
-    // std::for_each(model.getIndices().begin(), model.getIndices().end(), [](const std::vector<int> triangle) {
-    //     std::cout<< "Lambda expression" << std::endl;
-    // });
+    });
 }
 
 float
