@@ -20,7 +20,7 @@ public:
     ~Renderer();
 
     void rasterize();
-    void render();
+    void render(float **m);
     bool wireframe(bool xmlSVG);
 };
 

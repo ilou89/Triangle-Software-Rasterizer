@@ -7,7 +7,7 @@ set(NAME Drawlines)
 project(${NAME})
 
 #add -Wconversion
-add_definitions(-Wall -std=c++14 -Wextra -Winline -Wreturn-type -Wuninitialized -Winit-self -Werror -Wno-unused-parameter -Wno-unused-function)
+add_definitions(-Wall -std=c++17 -O3 -Wextra -Winline -Wreturn-type -Wuninitialized -Winit-self -Werror -Wno-unused-parameter -Wno-unused-function)
 
 # Bring the shared libraries into the project (for the linker and loader)
 set(PROJECT_LINK_LIBS libSDL2.so)

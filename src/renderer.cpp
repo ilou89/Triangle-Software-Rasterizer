@@ -271,22 +271,39 @@ Renderer::rasterize()
 }
 
 void
-Renderer::render()
+Renderer::render(float **m)
 {
     float intensity;
     Vec3f light_dir(0,0,-1);
-    unsigned int width = bmp.getWidth();
+    unsigned int width  = bmp.getWidth();
     unsigned int height = bmp.getHeight();
 
-    std::for_each(model.getIndices().begin(), model.getIndices().end(), [this, width, height, light_dir, &intensity](const std::vector<int> triangle) {
+    std::for_each(model.getIndices().begin(), model.getIndices().end(), [this, width, height, light_dir, &intensity, m](const std::vector<int> triangle) {
         //Alternative:  for (int i = 0; i < model.indicesSize(); ++i)
         Vec3f v0 = this->model.getVerticesAt(triangle[0]);
         Vec3f v1 = this->model.getVerticesAt(triangle[1]);
         Vec3f v2 = this->model.getVerticesAt(triangle[2]);
 
+        // Transform vertices according to transformation matrix 'm'
+        // Not sure if transformation should take place here or at a previous stage
+        // Also, mind the performance impact...9-multiplications and 9-additions per vertex
+        v0.x = m[0][0]*v0.x + m[0][1]*v0.y + m[0][2]*v0.z;
+        v0.y = m[1][0]*v0.x + m[1][1]*v0.y + m[1][2]*v0.z;
+        v0.z = m[2][0]*v0.x + m[2][1]*v0.y + m[2][2]*v0.z;
+
+        v1.x = m[0][0]*v1.x + m[0][1]*v1.y + m[0][2]*v1.z;
+        v1.y = m[1][0]*v1.x + m[1][1]*v1.y + m[1][2]*v1.z;
+        v1.z = m[2][0]*v1.x + m[2][1]*v1.y + m[2][2]*v1.z;
+
+        v2.x = m[0][0]*v2.x + m[0][1]*v2.y + m[0][2]*v2.z;
+        v2.y = m[1][0]*v2.x + m[1][1]*v2.y + m[1][2]*v2.z;
+        v2.z = m[2][0]*v2.x + m[2][1]*v2.y + m[2][2]*v2.z;
+
         Vec3f n = (v2 - v0) ^ (v1 - v0);
         n.normalize();
         intensity = n * light_dir;
+
+
 
         //Assume that the vertices read from .obj fle
         //are already in NDC space ([-1,1]).

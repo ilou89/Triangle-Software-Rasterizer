@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <math.h>
 
 static const unsigned int WIDTH = 800;
 static const unsigned int HEIGHT = 600;
@@ -33,24 +34,38 @@ int main(int argc, char *argv[]) {
     Bitmap bitmap(WIDTH, HEIGHT);
     Renderer renderer(choice, bitmap, mdloader);
 
-    auto start = std::chrono::system_clock::now();
-
-    /* Loop for benchmarking reasons */
-    for (uint32_t i = 0; i < 1; i++) {
-        renderer.wireframe(xmlSVG);
+    //Transformation matrix
+    float **matrix;
+    matrix = new float *[3];
+    for ( int i = 0; i <3; ++i ) {
+        matrix[i] = new float[3];
     }
 
-    /* Rasterize random triangles for testing reasons */
-    renderer.rasterize();
 
-    /* The main function that produces the rendered image */
-    renderer.render();
+    matrix[0][0] = 0.5f; matrix[0][1] = 0.0f; matrix[0][2] = 0.0f;
+    matrix[1][0] = 0.0f; matrix[1][1] = 0.2f; matrix[1][2] = 0.0f;
+    matrix[2][0] = 0.0f; matrix[2][1] = 0.0f; matrix[2][2] = 1.0f;
 
-    auto end = std::chrono::system_clock::now();
-    auto elapsed =
-    std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    std::cout << "Elapsed milliseconds:" << elapsed.count() << std::endl;
+    // while (1) {
+        auto start = std::chrono::system_clock::now();
 
+        /* Loop for benchmarking reasons */
+        // for (uint32_t i = 0; i < 1; i++) {
+        //     renderer.wireframe(xmlSVG);
+        // }
+
+        /* Rasterize random triangles for testing reasons */
+        // renderer.rasterize();
+
+        /* The main function that produces the rendered image */
+        renderer.render(matrix);
+
+        auto end = std::chrono::system_clock::now();
+        auto elapsed =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        std::cout << "Elapsed milliseconds:" << elapsed.count() << std::endl;
+
+    // }
     bitmap.write("lines.bmp");
 
     /* Blit the rendered image into an SDL created window */
